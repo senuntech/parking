@@ -1,0 +1,1 @@
+enum VehicleEnum { motorcycle, car }
