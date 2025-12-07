@@ -46,7 +46,10 @@ class _HomePageState extends State<HomePage> {
               title: 'Pátio',
               children: [
                 for (int i = 0; i <= 100; i++)
-                  VehicleWidget(type: .car, dateTime: DateTime.now()),
+                  VehicleWidget(
+                    type: .motorcycle,
+                    dateTime: DateTime(2025, 12, 6, 20),
+                  ),
               ],
             ),
             OneSize.height64,
