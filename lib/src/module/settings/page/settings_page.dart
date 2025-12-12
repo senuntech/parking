@@ -198,7 +198,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   OneInput(
                     hintText: 'Ex: R\$ 10,00',
                     icon: LucideIcons.banknoteArrowDown,
-                    label: 'Valor Único',
+                    label: 'Valor Fixo',
                     keyboardType: TextInputType.number,
                     validator: validatorRequired,
                     initialValue: UtilBrasilFields.obterReal(

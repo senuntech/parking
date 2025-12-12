@@ -62,7 +62,7 @@ class _TicketPageState extends State<TicketPage> {
                       child: OneSelect(
                         onChanged: setValue,
                         value: 1,
-                        label: 'Úni.',
+                        label: 'Fixo',
                         type: .background,
                         selected: valueType,
                       ),
