@@ -30,6 +30,7 @@ class ReceiptWidget extends StatelessWidget {
           OneSize.height8,
 
           OneText.heading1(isExist ? 'SAÍDA' : 'ENTRADA', textAlign: .center),
+          OneText.caption('Carro', textAlign: .center),
           OneSize.height8,
           OneText.caption('Modelo: GOL - XXXX-XXXX', textAlign: .center),
           OneText.caption(

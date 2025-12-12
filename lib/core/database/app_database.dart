@@ -1,5 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:parking/core/database/tables/configure.dart';
 import 'package:parking/core/database/tables/table_app.dart';
+
 import 'package:sqlbrite/sqlbrite.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -27,9 +30,11 @@ class AppDatabase {
       onCreate: (Database db, int version) async {
         await db.execute(settingsTable);
         await db.execute(modelsTicket);
+        await db.execute(orderTicket);
 
         final batch = db.batch();
 
+        await populateInitialData(db);
         final list = await batch.commit(continueOnError: true, noResult: false);
         debugPrint('Batch result: $list');
       },

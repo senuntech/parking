@@ -44,6 +44,14 @@ class _HomePageState extends State<HomePage> {
                 },
                 showDivider: false,
               ),
+              OneListTile(
+                title: 'Preços',
+                leading: Icon(LucideIcons.banknote),
+                onTap: () {
+                  Navigator.popAndPushNamed(context, Routes.category);
+                },
+                showDivider: false,
+              ),
 
               OneListTile(
                 title: 'Relatórios',

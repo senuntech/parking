@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:one_ds/one_ds.dart';
 import 'package:parking/core/database/app_database.dart';
+import 'package:parking/src/module/category/controller/category_controller.dart';
+import 'package:parking/src/module/category/page/category_page.dart';
 import 'package:parking/src/module/home/controller/home_controller.dart';
 import 'package:parking/src/module/home/page/home_page.dart';
 import 'package:parking/src/module/receipt/page/receipt_page.dart';
@@ -18,6 +20,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider.value(value: HomeController()),
         ChangeNotifierProvider.value(value: SettingsController(briteDb: db)),
+        ChangeNotifierProvider.value(value: CategoryController(briteDb: db)),
       ],
       child: const MyApp(),
     ),
@@ -29,23 +32,27 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'PrintPark',
-      theme: ThemeData(
-        useMaterial3: false,
-        primarySwatch: generateMaterialColor(color: const Color(0xff273D4A)),
-      ),
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: MaterialApp(
+        title: 'PrintPark',
+        theme: ThemeData(
+          useMaterial3: false,
+          primarySwatch: generateMaterialColor(color: const Color(0xff273D4A)),
+        ),
 
-      debugShowCheckedModeBanner: false,
-      initialRoute: Routes.splash,
-      routes: {
-        Routes.splash: (context) => SplashPage(),
-        Routes.home: (context) => HomePage(),
-        Routes.ticket: (context) => TicketPage(),
-        Routes.receipt: (context) => ReceiptPage(),
-        Routes.settings: (context) => SettingsPage(),
-        //Routes.printer: (context) => PrinterPage(),
-      },
+        debugShowCheckedModeBanner: false,
+        initialRoute: Routes.splash,
+        routes: {
+          Routes.splash: (context) => SplashPage(),
+          Routes.home: (context) => HomePage(),
+          Routes.ticket: (context) => TicketPage(),
+          Routes.receipt: (context) => ReceiptPage(),
+          Routes.settings: (context) => SettingsPage(),
+          Routes.category: (context) => CategoryPage(),
+          //Routes.printer: (context) => PrinterPage(),
+        },
+      ),
     );
   }
 }
@@ -57,4 +64,5 @@ abstract class Routes {
   static String receipt = '/receipt';
   static String settings = '/settings';
   static String printer = '/printer';
+  static String category = '/category';
 }

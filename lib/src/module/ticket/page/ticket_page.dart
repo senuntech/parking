@@ -12,10 +12,17 @@ class TicketPage extends StatefulWidget {
 
 class _TicketPageState extends State<TicketPage> {
   int valueType = 1;
+  int typeCar = 2;
 
   void setValue(int? value) {
     setState(() {
       valueType = value ?? 0;
+    });
+  }
+
+  void setTypeCar(int? value) {
+    setState(() {
+      typeCar = value ?? 0;
     });
   }
 
@@ -49,6 +56,59 @@ class _TicketPageState extends State<TicketPage> {
                   label: 'Segurança',
                   icon: LucideIcons.shieldCheck,
                   hintText: 'CPF do Responsável',
+                ),
+              ],
+            ),
+
+            OneCard(
+              title: 'Tipo De Veículo',
+              children: [
+                Row(
+                  spacing: 16,
+                  children: [
+                    Expanded(
+                      child: OneSelect(
+                        onChanged: setTypeCar,
+                        value: 1,
+                        label: 'Moto',
+                        type: .background,
+                        selected: typeCar,
+                      ),
+                    ),
+                    Expanded(
+                      child: OneSelect(
+                        onChanged: setTypeCar,
+                        value: 2,
+                        label: 'Carro',
+                        type: .background,
+                        selected: typeCar,
+                      ),
+                    ),
+                    Expanded(
+                      child: OneSelect(
+                        onChanged: setTypeCar,
+                        value: 3,
+                        label: 'Pesado',
+                        type: .background,
+                        selected: typeCar,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            OneCard(
+              title: 'Veículo',
+              children: [
+                OneInput(
+                  label: 'Modelo',
+                  icon: LucideIcons.carFront,
+                  hintText: 'Ex: Gol',
+                ),
+                OneInput(
+                  label: 'Placa',
+                  icon: LucideIcons.navigation,
+                  hintText: 'Ex: XXXX-XXX',
                 ),
               ],
             ),
@@ -89,21 +149,7 @@ class _TicketPageState extends State<TicketPage> {
                 ),
               ],
             ),
-            OneCard(
-              title: 'Veículo',
-              children: [
-                OneInput(
-                  label: 'Modelo',
-                  icon: LucideIcons.carFront,
-                  hintText: 'Ex: Gol',
-                ),
-                OneInput(
-                  label: 'Placa',
-                  icon: LucideIcons.navigation,
-                  hintText: 'Ex: XXXX-XXX',
-                ),
-              ],
-            ),
+
             OneSize.height128,
           ],
         ),

@@ -8,16 +8,12 @@ String settingsTable = '''
               type_pix INTEGER, 
               show_pix BOOLEAN, 
               my_pix TEXT,
-              number_of_vacancies INTEGER,
-              hourly_rate DOUBLE,
-              day_price DOUBLE,
-              single_price DOUBLE,
               text_receipt TEXT
           )
         ''';
 
-String modelsTicket = '''
-  CREATE TABLE vehicles(
+String orderTicket = '''
+  CREATE TABLE order_ticket(
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
     name TEXT, 
     whatsapp TEXT,
@@ -28,5 +24,14 @@ String modelsTicket = '''
     departure_date DATE,
     price DOUBLE,
     discount DOUBLE
+  )
+''';
+String modelsTicket = '''
+  CREATE TABLE vehicles(
+    id INTEGER PRIMARY KEY, 
+    single_price DOUBLE,
+    hourly_rate DOUBLE,
+    day_price DOUBLE,
+    number_of_vacancies INTEGER
   )
 ''';
