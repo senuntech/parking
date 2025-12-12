@@ -7,6 +7,32 @@ class SettingsController extends ChangeNotifier {
   SettingsModel settingsModel = SettingsModel();
   final BriteDatabase briteDb;
   SettingsController({required this.briteDb});
+  int typePix = 0;
 
-  void save() {}
+  void setPix(int type) {
+    typePix = type;
+    notifyListeners();
+  }
+
+  Future<void> save() async {
+    settingsModel = settingsModel.copyWith(type_pix: typePix);
+    if (settingsModel.id == null) {
+      await briteDb.insert('settings', settingsModel.toMap());
+      return;
+    }
+
+    await briteDb.update(
+      'settings',
+      settingsModel.toMap(),
+      where: 'id=${settingsModel.id}',
+    );
+  }
+
+  Future<void> get() async {
+    final res = await briteDb.query('settings');
+    if (res.isNotEmpty) {
+      settingsModel = SettingsModel.fromMap(res.first);
+      typePix = settingsModel.type_pix ?? 0;
+    }
+  }
 }

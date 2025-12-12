@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:one_ds/core/ui/index.dart';
+import 'package:parking/src/module/settings/controller/settings_controller.dart';
+import 'package:provider/provider.dart';
 
 class SelectPix extends StatefulWidget {
   const SelectPix({super.key});
@@ -10,67 +12,70 @@ class SelectPix extends StatefulWidget {
 
 class _SelectPixState extends State<SelectPix> {
   Widget expanded(Widget child) => Expanded(child: child);
-  int select = 0;
-
-  void onSelect(value) {
-    setState(() {
-      select = value;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     double space = 16;
-    return Column(
-      spacing: space,
-      children: [
-        Row(
+    return Consumer<SettingsController>(
+      builder: (context, value, _) {
+        void onSelect(type) {
+          setState(() {
+            value.typePix = type;
+          });
+        }
+
+        return Column(
           spacing: space,
           children: [
-            expanded(
-              OneSelect(
-                onChanged: onSelect,
-                value: 1,
-                label: 'E-mail',
-                selected: select,
-                type: OneSelectType.background,
-              ),
+            Row(
+              spacing: space,
+              children: [
+                expanded(
+                  OneSelect(
+                    onChanged: onSelect,
+                    value: 1,
+                    label: 'E-mail',
+                    selected: value.typePix,
+                    type: OneSelectType.background,
+                  ),
+                ),
+                expanded(
+                  OneSelect(
+                    value: 2,
+                    onChanged: onSelect,
+                    selected: value.typePix,
+                    label: 'CPF',
+                    type: OneSelectType.background,
+                  ),
+                ),
+              ],
             ),
-            expanded(
-              OneSelect(
-                value: 2,
-                onChanged: onSelect,
-                selected: select,
-                label: 'CPF',
-                type: OneSelectType.background,
-              ),
+            Row(
+              spacing: space,
+              children: [
+                expanded(
+                  OneSelect(
+                    value: 3,
+                    onChanged: onSelect,
+                    selected: value.typePix,
+                    label: 'CNPJ',
+                    type: OneSelectType.background,
+                  ),
+                ),
+                expanded(
+                  OneSelect(
+                    value: 4,
+                    onChanged: onSelect,
+                    selected: value.typePix,
+                    label: 'Telefone',
+                    type: OneSelectType.background,
+                  ),
+                ),
+              ],
             ),
           ],
-        ),
-        Row(
-          spacing: space,
-          children: [
-            expanded(
-              OneSelect(
-                value: 3,
-                onChanged: onSelect,
-                selected: select,
-                label: 'CNPJ',
-                type: OneSelectType.background,
-              ),
-            ),
-            expanded(
-              OneSelect(
-                value: 4,
-                onChanged: onSelect,
-                selected: select,
-                label: 'Telefone',
-                type: OneSelectType.background,
-              ),
-            ),
-          ],
-        ),
-      ],
+        );
+      },
     );
   }
 }

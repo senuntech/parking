@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:one_ds/core/index.dart';
 import 'package:one_ds/one_ds.dart';
+import 'package:parking/core/utils/validator.dart';
+import 'package:parking/src/module/settings/controller/settings_controller.dart';
 import 'package:parking/src/module/settings/widget/select_pix.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -20,6 +23,8 @@ class _SettingsPageState extends State<SettingsPage> {
   final GlobalKey keyScrollPix = GlobalKey();
   bool showPix = false;
   bool showButton = false;
+  late SettingsController settingsController;
+  final formKey = GlobalKey<FormState>();
 
   void getImage() async {
     final ImagePicker picker = ImagePicker();
@@ -30,6 +35,7 @@ class _SettingsPageState extends State<SettingsPage> {
     );
     if (image != null) {
       final path = await saveImageInternally(File(image.path));
+      settingsController.settingsModel.image_path = path;
       setState(() {
         this.image = File(image.path);
       });
@@ -46,6 +52,12 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   void initState() {
     super.initState();
+    settingsController = context.read<SettingsController>();
+    showPix = settingsController.settingsModel.show_pix ?? false;
+    if (settingsController.settingsModel.image_path != null) {
+      image = File(settingsController.settingsModel.image_path!);
+    }
+
     scrollController.addListener(() {
       final noFinal =
           scrollController.position.pixels >=
@@ -56,6 +68,16 @@ class _SettingsPageState extends State<SettingsPage> {
         setState(() => showButton = false);
       }
     });
+  }
+
+  void onSave() async {
+    if (!formKey.currentState!.validate()) {
+      return;
+    }
+    formKey.currentState!.save();
+    settingsController.settingsModel.show_pix = showPix;
+    await settingsController.save();
+    Navigator.pop(context);
   }
 
   @override
@@ -72,12 +94,13 @@ class _SettingsPageState extends State<SettingsPage> {
       body: OneBody(
         scrollController: scrollController,
         child: Form(
+          key: formKey,
           child: Column(
             crossAxisAlignment: .stretch,
             spacing: OneSizeConstants.size16,
             children: [
               OneCard(
-                title: 'Adicione seu logo',
+                title: 'Adicione Logo',
                 children: [
                   Row(
                     mainAxisAlignment: .spaceBetween,
@@ -105,14 +128,20 @@ class _SettingsPageState extends State<SettingsPage> {
                   OneInput(
                     hintText: 'Nome da Empresa',
                     icon: LucideIcons.building,
+                    initialValue: settingsController.settingsModel.name,
                     label: 'Nome da Empresa',
+                    validator: validatorRequired,
+                    onSaved: (value) =>
+                        settingsController.settingsModel.name = value,
                   ),
                   OneInput(
                     hintText: 'CNPJ',
                     icon: LucideIcons.dock,
                     label: 'CNPJ',
-
+                    initialValue: settingsController.settingsModel.document,
                     keyboardType: TextInputType.number,
+                    onSaved: (value) =>
+                        settingsController.settingsModel.document = value,
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                       CnpjInputFormatter(),
@@ -121,8 +150,11 @@ class _SettingsPageState extends State<SettingsPage> {
                   OneInput(
                     hintText: 'Digite o telefone',
                     icon: LucideIcons.phone,
+                    initialValue: settingsController.settingsModel.phone,
+                    onSaved: (value) =>
+                        settingsController.settingsModel.phone = value,
                     label: 'Telefone',
-
+                    validator: validatorRequired,
                     keyboardType: TextInputType.number,
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
@@ -151,6 +183,10 @@ class _SettingsPageState extends State<SettingsPage> {
                       label: 'PIX',
                       hintText: 'Digite seu Pix',
                       icon: LucideIcons.circleDollarSign,
+                      validator: validatorRequired,
+                      initialValue: settingsController.settingsModel.my_pix,
+                      onSaved: (value) =>
+                          settingsController.settingsModel.my_pix = value,
                     ),
                   ],
                 ],
@@ -164,21 +200,60 @@ class _SettingsPageState extends State<SettingsPage> {
                     icon: LucideIcons.banknoteArrowDown,
                     label: 'Valor Único',
                     keyboardType: TextInputType.number,
-                    inputFormatters: [],
+                    validator: validatorRequired,
+                    initialValue: UtilBrasilFields.obterReal(
+                      settingsController.settingsModel.single_price ?? 0,
+                    ),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      CentavosInputFormatter(moeda: true),
+                    ],
+                    onSaved: (value) {
+                      settingsController.settingsModel.single_price =
+                          UtilBrasilFields.converterMoedaParaDouble(
+                            value ?? '0',
+                          );
+                    },
                   ),
                   OneInput(
                     hintText: 'Ex: R\$ 10,00',
                     icon: LucideIcons.dollarSign,
                     label: 'Valor Por Hora',
                     keyboardType: TextInputType.number,
-                    inputFormatters: [],
+                    initialValue: UtilBrasilFields.obterReal(
+                      settingsController.settingsModel.hourly_rate ?? 0,
+                    ),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      CentavosInputFormatter(moeda: true),
+                    ],
+                    onSaved: (value) {
+                      if (value!.isEmpty) {
+                        return;
+                      }
+                      settingsController.settingsModel.hourly_rate =
+                          UtilBrasilFields.converterMoedaParaDouble(value);
+                    },
                   ),
                   OneInput(
                     hintText: 'Ex: R\$ 10,00',
                     icon: LucideIcons.banknote,
                     label: 'Valor Por Dia',
                     keyboardType: TextInputType.number,
-                    inputFormatters: [],
+                    initialValue: UtilBrasilFields.obterReal(
+                      settingsController.settingsModel.day_price ?? 0,
+                    ),
+                    onSaved: (value) {
+                      if (value!.isEmpty) {
+                        return;
+                      }
+                      settingsController.settingsModel.day_price =
+                          UtilBrasilFields.converterMoedaParaDouble(value);
+                    },
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      CentavosInputFormatter(moeda: true),
+                    ],
                   ),
 
                   OneInput(
@@ -186,7 +261,15 @@ class _SettingsPageState extends State<SettingsPage> {
                     icon: LucideIcons.octagonMinus,
                     label: 'Quantidade De Vagas',
                     keyboardType: TextInputType.number,
-                    inputFormatters: [],
+                    initialValue: settingsController
+                        .settingsModel
+                        .number_of_vacancies
+                        .toString(),
+                    onSaved: (value) {
+                      settingsController.settingsModel.number_of_vacancies =
+                          int.tryParse(value ?? '0');
+                    },
+                    validator: validatorRequired,
                   ),
                 ],
               ),
@@ -197,7 +280,10 @@ class _SettingsPageState extends State<SettingsPage> {
                     hintText: 'Ex: Não nos responsabilizamos por itens',
                     icon: LucideIcons.textInitial,
                     label: 'Texto',
-                    inputFormatters: [],
+                    initialValue: settingsController.settingsModel.text_receipt,
+                    onSaved: (value) {
+                      settingsController.settingsModel.text_receipt = value;
+                    },
                   ),
                 ],
               ),
@@ -210,7 +296,7 @@ class _SettingsPageState extends State<SettingsPage> {
       floatingActionButtonLocation: .centerFloat,
       floatingActionButton: showButton
           ? FloatingActionButton.extended(
-              onPressed: () {},
+              onPressed: onSave,
               label: OneText('Salvar Configurações'),
               icon: Icon(LucideIcons.check),
             )
