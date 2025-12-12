@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:one_ds/one_ds.dart';
 import 'package:parking/core/enum/vehicle_enum.dart';
-import 'package:parking/core/utils/validator.dart';
 import 'package:parking/src/module/category/page/category_add_view.dart';
 import 'package:parking/src/module/category/widgets/item_category.dart';
 
