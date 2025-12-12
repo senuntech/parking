@@ -12,9 +12,11 @@ class VehicleWidget extends StatefulWidget {
     super.key,
     this.type = VehicleEnum.car,
     required this.dateTime,
+    required this.onTap,
   });
   final VehicleEnum type;
   final DateTime dateTime;
+  final VoidCallback onTap;
 
   @override
   State<VehicleWidget> createState() => _VehicleWidgetState();
@@ -27,13 +29,21 @@ class _VehicleWidgetState extends State<VehicleWidget> {
     Color backGround = color.withAlpha(90);
 
     if (widget.type == VehicleEnum.motorcycle) {
-      return CircleAvatar(
-        backgroundColor: backGround,
+      return Container(
+        padding: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: backGround,
+          borderRadius: BorderRadius.circular(8),
+        ),
         child: Icon(LucideIcons.motorbike, color: color),
       );
     }
-    return CircleAvatar(
-      backgroundColor: backGround,
+    return Container(
+      padding: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: backGround,
+        borderRadius: BorderRadius.circular(8),
+      ),
       child: Icon(LucideIcons.carFront, color: color),
     );
   }
@@ -49,8 +59,8 @@ class _VehicleWidgetState extends State<VehicleWidget> {
       title: 'GOL - PLA-123',
       leading: lead,
       actions: [TimerWidget(timer: widget.dateTime)],
+      onTap: widget.onTap,
       children: [OneText.caption('06/12/2025 12:00h')],
-      onTap: () {},
     );
   }
 }

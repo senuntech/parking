@@ -1,37 +1,32 @@
 String settingsTable = '''
           CREATE TABLE settings( 
               id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
-              imagePath TEXT,
+              image_path TEXT,
               name TEXT,
               document TEXT,
               phone TEXT,
-              typePix INTEGER, 
-              modelCar TEXT,
-              plateCar TEXT,
-              textReceipt TEXT,
-              showPix BOOLEAN, 
-              myPix TEXT
+              type_pix INTEGER, 
+              show_pix BOOLEAN, 
+              my_pix TEXT,
+              number_of_vacancies INTEGER,
+              hourly_rate DOUBLE,
+              day_price DOUBLE,
+              single_price DOUBLE,
+              text_receipt TEXT
           )
         ''';
 
 String modelsTicket = '''
-  CREATE TABLE ticket(
+  CREATE TABLE vehicles(
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
     name TEXT, 
-    departure TEXT,
-    destination TEXT,
-    price DOUBLE
-  )
-''';
-
-String orderTicket = '''
-  CREATE TABLE order_ticket(
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+    whatsapp TEXT,
+    document TEXT,
+    model_car TEXT, 
+    place_car TEXT,
     created_at DATE DEFAULT CURRENT_TIMESTAMP,
-    customer_name TEXT, 
-    departure TEXT,
-    destination TEXT,
-    customer_discount DOUBLE,
-    price DOUBLE
+    departure_date DATE,
+    price DOUBLE,
+    discount DOUBLE
   )
 ''';

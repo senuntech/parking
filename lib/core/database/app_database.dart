@@ -27,7 +27,6 @@ class AppDatabase {
       onCreate: (Database db, int version) async {
         await db.execute(settingsTable);
         await db.execute(modelsTicket);
-        await db.execute(orderTicket);
 
         final batch = db.batch();
 

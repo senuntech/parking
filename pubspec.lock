@@ -33,14 +33,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.13"
-  bluetooth_print_plus:
-    dependency: "direct main"
-    description:
-      name: bluetooth_print_plus
-      sha256: "9d059064e8d7d8af9dbd1bf9b4c964428cb567d2f372a85177d9ba0f4e743d71"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.4.6"
   boolean_selector:
     dependency: transitive
     description:
@@ -962,7 +954,7 @@ packages:
     source: hosted
     version: "12.3.0"
   url_launcher:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: url_launcher
       sha256: f6a7e5c4835bb4e3026a04793a4199ca2d14c739ec378fdfe23fc8075d0439f8

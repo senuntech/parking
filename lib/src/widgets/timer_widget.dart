@@ -5,6 +5,7 @@ import 'package:one_ds/core/colors/one_colors.dart';
 import 'package:one_ds/core/ui/atoms/one_tagger.dart';
 import 'package:one_ds/one_ds.dart';
 import 'package:parking/core/extension/date_timer.dart';
+import 'package:parking/core/extension/duration_extension.dart';
 
 class TimerWidget extends StatefulWidget {
   const TimerWidget({super.key, required this.timer});
@@ -25,14 +26,14 @@ class _TimerWidgetState extends State<TimerWidget> {
   }
 
   void init() {
-    Timer.periodic(Duration(seconds: 30), (timer) {
+    Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {});
     });
   }
 
   String get getTimer {
     final now = DateTime.now().difference(widget.timer);
-    return now.toString().substring(0, 4);
+    return now.toHms();
   }
 
   @override
