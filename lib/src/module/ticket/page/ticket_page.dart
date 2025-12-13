@@ -8,8 +8,9 @@ import 'package:one_ds/one_ds.dart'
         OneText,
         TelefoneInputFormatter,
         PlacaVeiculoInputFormatter;
-import 'package:parking/core/database/tables/table_app.dart';
+
 import 'package:parking/core/utils/validator.dart';
+import 'package:parking/main.dart';
 import 'package:parking/src/module/ticket/controller/ticket_controller.dart';
 import 'package:parking/src/module/ticket/model/order_ticket_model.dart';
 import 'package:provider/provider.dart';
@@ -32,6 +33,9 @@ class _TicketPageState extends State<TicketPage> {
   final modelController = TextEditingController();
   final plateController = TextEditingController();
   OrderTicketModel? orderTicketModel;
+  final ScrollController scrollController = ScrollController();
+
+  bool showButton = false;
 
   void setValue(int? value) {
     setState(() {
@@ -55,19 +59,28 @@ class _TicketPageState extends State<TicketPage> {
 
     if (orderTicketModel?.id != null) {
       ticketController.updateTicket(orderTicketModel!);
+      Navigator.popAndPushNamed(
+        context,
+        Routes.receipt,
+        arguments: orderTicketModel,
+      );
       return;
     }
-    ticketController.addTicket(
-      OrderTicketModel(
-        valueType: valueType,
-        name: nameController.text,
-        phone: phoneController.text,
-        document: securityController.text,
-        model: modelController.text,
-        plate: plateController.text,
-        typeVehicles: typeVehicles,
-        createdAt: DateTime.now(),
-      ),
+    orderTicketModel = OrderTicketModel(
+      valueType: valueType,
+      name: nameController.text,
+      phone: phoneController.text,
+      document: securityController.text,
+      model: modelController.text,
+      plate: plateController.text,
+      typeVehicles: typeVehicles,
+      createdAt: DateTime.now(),
+    );
+    ticketController.addTicket(orderTicketModel!);
+    Navigator.popAndPushNamed(
+      context,
+      Routes.receipt,
+      arguments: orderTicketModel,
     );
   }
 
@@ -75,6 +88,17 @@ class _TicketPageState extends State<TicketPage> {
   void initState() {
     super.initState();
     ticketController = context.read<TicketController>();
+
+    scrollController.addListener(() {
+      final noFinal =
+          scrollController.position.pixels >=
+          scrollController.position.maxScrollExtent;
+      if (noFinal && !showButton) {
+        setState(() => showButton = true);
+      } else if (!noFinal && showButton) {
+        setState(() => showButton = false);
+      }
+    });
     WidgetsBinding.instance.addPostFrameCallback((_) => onInit());
   }
 
@@ -115,6 +139,7 @@ class _TicketPageState extends State<TicketPage> {
         subtitle: 'Adicionar veiculo',
       ),
       body: OneBody(
+        scrollController: scrollController,
         child: Form(
           key: formKey,
           child: Column(
@@ -282,11 +307,13 @@ class _TicketPageState extends State<TicketPage> {
         ),
       ),
       floatingActionButtonLocation: .centerFloat,
-      floatingActionButton: FloatingActionButton.extended(
-        icon: Icon(LucideIcons.save),
-        onPressed: onSave,
-        label: OneText('Adicionar Veículo'),
-      ),
+      floatingActionButton: showButton
+          ? FloatingActionButton.extended(
+              icon: Icon(LucideIcons.save),
+              onPressed: onSave,
+              label: OneText('Adicionar Veículo'),
+            )
+          : null,
     );
   }
 }

@@ -6,6 +6,7 @@ import 'package:one_ds/one_ds.dart';
 import 'package:parking/core/enum/vehicle_enum.dart';
 import 'package:parking/core/utils/launch.dart';
 import 'package:parking/main.dart';
+import 'package:parking/src/module/category/controller/category_controller.dart';
 import 'package:parking/src/module/home/widgets/empty_page.dart';
 import 'package:parking/src/module/home/widgets/input.dart';
 import 'package:parking/src/module/ticket/controller/ticket_controller.dart';
@@ -180,6 +181,18 @@ class _HomePageState extends State<HomePage> {
         Padding(
           padding: .symmetric(horizontal: 16.0),
           child: OneListTile(
+            title: 'Deletar',
+            leading: Icon(LucideIcons.trash),
+            onTap: () {
+              Navigator.pop(context);
+              onDelete(orderTicketModel.id!);
+            },
+            children: [OneText('Deletar veículo')],
+          ),
+        ),
+        Padding(
+          padding: .symmetric(horizontal: 16.0),
+          child: OneListTile(
             title: 'Segunda Via',
             leading: Icon(LucideIcons.send),
 
@@ -194,6 +207,24 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ],
+    );
+  }
+
+  void onDelete(int id) {
+    ShowAlert.show(
+      context,
+      title: 'Deletar',
+      message: 'Deseja deletar o veículo?',
+      labelYes: 'Sim',
+      labelNo: 'Não',
+      onYes: () {
+        context.read<TicketController>().deleteTicket(id);
+        ShowSnakBar.show(
+          context,
+          message: 'Veículo deletado com sucesso',
+          type: .success,
+        );
+      },
     );
   }
 
@@ -256,7 +287,20 @@ class _HomePageState extends State<HomePage> {
                 ),
                 OneCard(
                   children: [
-                    OneText('10/30', style: TextStyle(fontWeight: .bold)),
+                    Consumer2<TicketController, CategoryController>(
+                      builder:
+                          (
+                            context,
+                            ticketController,
+                            categoryController,
+                            child,
+                          ) {
+                            return OneText(
+                              '${ticketController.tickets.length}/${categoryController.length()}',
+                              style: TextStyle(fontWeight: .bold),
+                            );
+                          },
+                    ),
                   ],
                 ),
               ],

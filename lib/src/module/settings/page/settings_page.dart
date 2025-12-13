@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:one_ds/core/index.dart';
 import 'package:one_ds/one_ds.dart';
+import 'package:parking/core/enum/type_pix_enum.dart';
 import 'package:parking/core/utils/validator.dart';
 import 'package:parking/src/module/settings/controller/settings_controller.dart';
 import 'package:parking/src/module/settings/widget/select_pix.dart';
@@ -78,6 +79,27 @@ class _SettingsPageState extends State<SettingsPage> {
     settingsController.settingsModel.show_pix = showPix;
     await settingsController.save();
     Navigator.pop(context);
+  }
+
+  List<TextInputFormatter>? get formatted {
+    List<TextInputFormatter> list = [FilteringTextInputFormatter.digitsOnly];
+
+    int? currentType = settingsController.settingsModel.type_pix;
+
+    if (currentType == TypePixEnum.email.type) {
+      list.clear();
+    }
+    if (currentType == TypePixEnum.cpf.type) {
+      list.add(CpfInputFormatter());
+    }
+    if (currentType == TypePixEnum.cnpj.type) {
+      list.add(CnpjInputFormatter());
+    }
+    if (currentType == TypePixEnum.telefone.type) {
+      list.add(TelefoneInputFormatter());
+    }
+
+    return list;
   }
 
   @override
@@ -187,6 +209,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       initialValue: settingsController.settingsModel.my_pix,
                       onSaved: (value) =>
                           settingsController.settingsModel.my_pix = value,
+                      inputFormatters: formatted,
                     ),
                   ],
                 ],

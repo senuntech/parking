@@ -3,6 +3,7 @@ import 'package:one_ds/core/ui/index.dart';
 import 'package:one_ds/core/ui/organisms/one_app_bar.dart';
 import 'package:one_ds/one_ds.dart';
 import 'package:parking/src/module/receipt/widgets/receipt_widget.dart';
+import 'package:parking/src/module/ticket/model/order_ticket_model.dart';
 
 class ReceiptPage extends StatefulWidget {
   const ReceiptPage({super.key});
@@ -13,13 +14,15 @@ class ReceiptPage extends StatefulWidget {
 
 class _ReceiptPageState extends State<ReceiptPage> {
   bool isExist = false;
+  OrderTicketModel? orderTicketModel;
 
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)?.settings.arguments;
 
     if (args != null) {
-      isExist = args != null;
+      orderTicketModel = args as OrderTicketModel;
+      isExist = true;
     }
     return Scaffold(
       appBar: OneAppBar(
@@ -44,7 +47,14 @@ class _ReceiptPageState extends State<ReceiptPage> {
             border: .all(color: OneColors.dark1.withAlpha(50)),
           ),
           height: MediaQuery.of(context).size.height * .7,
-          child: ListView(children: [ReceiptWidget(isExist: isExist)]),
+          child: ListView(
+            children: [
+              ReceiptWidget(
+                isExist: isExist,
+                orderTicketModel: orderTicketModel,
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -22,4 +22,12 @@ class CategoryController extends ChangeNotifier {
     categories = res.map((e) => CategoryModel.fromJson(e)).toList();
     notifyListeners();
   }
+
+  int length() {
+    int total = categories.fold(
+      0,
+      (previousValue, element) => previousValue + element.numberOfVacancies!,
+    );
+    return total;
+  }
 }

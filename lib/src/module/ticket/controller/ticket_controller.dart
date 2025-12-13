@@ -10,6 +10,10 @@ class TicketController extends ChangeNotifier {
   TicketController({required this.briteDb});
 
   Future<void> addTicket(OrderTicketModel orderTicketModel) async {
+    if (tickets.any((element) => element.plate == orderTicketModel.plate)) {
+      return;
+    }
+
     await briteDb.insert('order_ticket', orderTicketModel.toMap());
     getTickets();
     notifyListeners();
@@ -27,11 +31,15 @@ class TicketController extends ChangeNotifier {
 
   Future<void> deleteTicket(int id) async {
     await briteDb.delete('order_ticket', where: 'id = ?', whereArgs: [id]);
+    getTickets();
     notifyListeners();
   }
 
   Future<List<OrderTicketModel>> getTickets() async {
-    final List<Map<String, dynamic>> maps = await briteDb.query('order_ticket');
+    final List<Map<String, dynamic>> maps = await briteDb.query(
+      'order_ticket',
+      where: 'exit_at IS NULL',
+    );
     tickets = maps.map((map) => OrderTicketModel.fromMap(map)).toList();
     tickets = tickets.reversed.toList();
     resultSearch = tickets;
