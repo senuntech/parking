@@ -9,6 +9,7 @@ import 'package:parking/src/module/receipt/page/receipt_page.dart';
 import 'package:parking/src/module/settings/controller/settings_controller.dart';
 import 'package:parking/src/module/settings/page/settings_page.dart';
 import 'package:parking/src/module/splash/page/splash_page.dart';
+import 'package:parking/src/module/ticket/controller/ticket_controller.dart';
 import 'package:parking/src/module/ticket/page/ticket_page.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +22,7 @@ void main() async {
         ChangeNotifierProvider.value(value: HomeController()),
         ChangeNotifierProvider.value(value: SettingsController(briteDb: db)),
         ChangeNotifierProvider.value(value: CategoryController(briteDb: db)),
+        ChangeNotifierProvider.value(value: TicketController(briteDb: db)),
       ],
       child: const MyApp(),
     ),

@@ -1,0 +1,53 @@
+import 'package:flutter/material.dart';
+import 'package:parking/src/module/ticket/model/order_ticket_model.dart';
+import 'package:sqlbrite/sqlbrite.dart';
+
+class TicketController extends ChangeNotifier {
+  final BriteDatabase briteDb;
+  List<OrderTicketModel> tickets = [];
+  List<OrderTicketModel> resultSearch = [];
+
+  TicketController({required this.briteDb});
+
+  Future<void> addTicket(OrderTicketModel orderTicketModel) async {
+    await briteDb.insert('order_ticket', orderTicketModel.toMap());
+    getTickets();
+    notifyListeners();
+  }
+
+  Future<void> updateTicket(OrderTicketModel orderTicketModel) async {
+    await briteDb.update(
+      'order_ticket',
+      orderTicketModel.toMap(),
+      where: 'id = ?',
+      whereArgs: [orderTicketModel.id],
+    );
+    notifyListeners();
+  }
+
+  Future<void> deleteTicket(int id) async {
+    await briteDb.delete('order_ticket', where: 'id = ?', whereArgs: [id]);
+    notifyListeners();
+  }
+
+  Future<List<OrderTicketModel>> getTickets() async {
+    final List<Map<String, dynamic>> maps = await briteDb.query('order_ticket');
+    tickets = maps.map((map) => OrderTicketModel.fromMap(map)).toList();
+    tickets = tickets.reversed.toList();
+    resultSearch = tickets;
+    notifyListeners();
+    return tickets;
+  }
+
+  Future<List<OrderTicketModel>> searchTicket(String query) async {
+    resultSearch = tickets
+        .where(
+          (element) =>
+              element.model!.toLowerCase().contains(query.toLowerCase()),
+        )
+        .toList();
+
+    notifyListeners();
+    return resultSearch;
+  }
+}

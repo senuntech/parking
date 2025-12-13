@@ -19,7 +19,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
     final args = ModalRoute.of(context)?.settings.arguments;
 
     if (args != null) {
-      isExist = args as bool;
+      isExist = args != null;
     }
     return Scaffold(
       appBar: OneAppBar(

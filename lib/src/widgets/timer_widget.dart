@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:one_ds/core/colors/one_colors.dart';
 import 'package:one_ds/core/ui/atoms/one_tagger.dart';
 import 'package:one_ds/one_ds.dart';
-import 'package:parking/core/extension/date_timer.dart';
 import 'package:parking/core/extension/duration_extension.dart';
 
 class TimerWidget extends StatefulWidget {
@@ -16,6 +15,7 @@ class TimerWidget extends StatefulWidget {
 }
 
 class _TimerWidgetState extends State<TimerWidget> {
+  late Timer _timer;
   late DateTime dateTime;
 
   @override
@@ -25,9 +25,17 @@ class _TimerWidgetState extends State<TimerWidget> {
     dateTime = widget.timer;
   }
 
+  @override
+  void dispose() {
+    if (_timer.isActive) _timer.cancel();
+    super.dispose();
+  }
+
   void init() {
-    Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {});
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (mounted) {
+        setState(() {});
+      }
     });
   }
 

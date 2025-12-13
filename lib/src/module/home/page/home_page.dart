@@ -3,10 +3,15 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:one_ds/core/ui/index.dart';
 import 'package:one_ds/one_ds.dart';
+import 'package:parking/core/enum/vehicle_enum.dart';
 import 'package:parking/core/utils/launch.dart';
 import 'package:parking/main.dart';
+import 'package:parking/src/module/home/widgets/empty_page.dart';
 import 'package:parking/src/module/home/widgets/input.dart';
+import 'package:parking/src/module/ticket/controller/ticket_controller.dart';
+import 'package:parking/src/module/ticket/model/order_ticket_model.dart';
 import 'package:parking/src/widgets/vehicle_widget.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,6 +22,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final keyScafold = GlobalKey<ScaffoldState>();
+  bool showButton = false;
+  FocusNode focusNode = FocusNode();
+
   Widget get drawer {
     return Drawer(
       child: ListView(
@@ -132,10 +140,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void showAction() {
+  void showAction(OrderTicketModel orderTicketModel) {
     OneBottomSheet.show(
       context: context,
-      title: 'Opções',
+      title: orderTicketModel.name!,
       content: [
         Padding(
           padding: .symmetric(horizontal: 16.0),
@@ -148,7 +156,23 @@ class _HomePageState extends State<HomePage> {
               Navigator.popAndPushNamed(
                 context,
                 Routes.receipt,
-                arguments: true,
+                arguments: orderTicketModel,
+              );
+            },
+          ),
+        ),
+        Padding(
+          padding: .symmetric(horizontal: 16.0),
+          child: OneListTile(
+            title: 'Editar',
+            leading: Icon(LucideIcons.pen),
+
+            children: [OneText('Editar veículo')],
+            onTap: () {
+              Navigator.popAndPushNamed(
+                context,
+                Routes.ticket,
+                arguments: orderTicketModel,
               );
             },
           ),
@@ -161,7 +185,11 @@ class _HomePageState extends State<HomePage> {
 
             children: [OneText('Imprimir ou Compartilhar segunda via')],
             onTap: () {
-              Navigator.popAndPushNamed(context, Routes.receipt);
+              Navigator.popAndPushNamed(
+                context,
+                Routes.receipt,
+                arguments: orderTicketModel,
+              );
             },
           ),
         ),
@@ -169,25 +197,52 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  VehicleEnum vehicleEnum(int type) {
+    switch (type) {
+      case 1:
+        return VehicleEnum.motorcycle;
+      case 2:
+        return VehicleEnum.car;
+
+      default:
+        return VehicleEnum.truck;
+    }
+  }
+
+  void initFocusNode() {
+    focusNode.addListener(() {
+      if (focusNode.hasFocus) {
+        showButton = true;
+        setState(() {});
+      } else {
+        showButton = false;
+        setState(() {});
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initFocusNode();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: keyScafold,
-      drawer: drawer,
       appBar: OneAppBar(
-        title: 'Home',
+        title: 'PrintPark',
         context: context,
         subtitle: 'Lista de carros no pátio',
         onPressedMenu: () {
           keyScafold.currentState?.openDrawer();
         },
-        actions: [
-          OneMiniButton(icon: LucideIcons.chartColumnBig, onPressed: () {}),
-        ],
       ),
+      drawer: drawer,
       body: OneBody(
         child: Column(
-          crossAxisAlignment: .stretch,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           spacing: 16,
           children: [
             Row(
@@ -196,7 +251,7 @@ class _HomePageState extends State<HomePage> {
                 Expanded(
                   child: OneCard(
                     padding: EdgeInsets.all(3),
-                    children: [Input()],
+                    children: [Input(focusNode: focusNode)],
                   ),
                 ),
                 OneCard(
@@ -206,28 +261,38 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            OneCard(
-              title: 'Pátio',
-              children: [
-                for (int i = 0; i <= 100; i++)
-                  VehicleWidget(
-                    type: (i % 2 == 0) ? .car : .motorcycle,
-                    dateTime: DateTime(2025, 12, 11, 12),
-                    onTap: showAction,
-                  ),
-              ],
+            Consumer<TicketController>(
+              builder: (context, ticketController, child) {
+                if (ticketController.resultSearch.isEmpty) {
+                  return EmptyPage();
+                }
+                return OneCard(
+                  title: 'Pátio',
+                  children: ticketController.resultSearch.map((ticket) {
+                    return VehicleWidget(
+                      type: vehicleEnum(ticket.typeVehicles!),
+                      dateTime: ticket.createdAt!,
+                      onTap: () => showAction(ticket),
+                      plate: ticket.plate!,
+                      model: ticket.model!,
+                    );
+                  }).toList(),
+                );
+              },
             ),
             OneSize.height128,
           ],
         ),
       ),
       floatingActionButtonLocation: .centerFloat,
-      floatingActionButton: FloatingActionButton.large(
-        onPressed: () {
-          Navigator.pushNamed(context, Routes.ticket);
-        },
-        child: Icon(LucideIcons.plus),
-      ),
+      floatingActionButton: showButton
+          ? null
+          : FloatingActionButton.large(
+              onPressed: () {
+                Navigator.pushNamed(context, Routes.ticket);
+              },
+              child: Icon(LucideIcons.plus),
+            ),
     );
   }
 }

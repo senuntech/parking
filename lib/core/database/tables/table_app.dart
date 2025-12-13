@@ -16,14 +16,17 @@ String orderTicket = '''
   CREATE TABLE order_ticket(
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
     name TEXT, 
-    whatsapp TEXT,
+    phone TEXT,
     document TEXT,
-    model_car TEXT, 
-    place_car TEXT,
+    model TEXT, 
+    plate TEXT,
     created_at DATE DEFAULT CURRENT_TIMESTAMP,
-    departure_date DATE,
     price DOUBLE,
-    discount DOUBLE
+    discount DOUBLE,
+    value_type INTEGER,
+    exit_at DATE,
+    type_vehicles INTEGER,
+    FOREIGN KEY(type_vehicles) REFERENCES vehicles(id)
   )
 ''';
 String modelsTicket = '''

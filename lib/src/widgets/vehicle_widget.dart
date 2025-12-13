@@ -1,10 +1,8 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:one_ds/core/ui/index.dart';
 import 'package:one_ds/one_ds.dart';
 import 'package:parking/core/enum/vehicle_enum.dart';
 import 'package:parking/core/extension/date_timer.dart';
+
 import 'package:parking/src/widgets/timer_widget.dart';
 
 class VehicleWidget extends StatefulWidget {
@@ -13,10 +11,14 @@ class VehicleWidget extends StatefulWidget {
     this.type = VehicleEnum.car,
     required this.dateTime,
     required this.onTap,
+    required this.plate,
+    required this.model,
   });
   final VehicleEnum type;
   final DateTime dateTime;
   final VoidCallback onTap;
+  final String plate;
+  final String model;
 
   @override
   State<VehicleWidget> createState() => _VehicleWidgetState();
@@ -24,8 +26,9 @@ class VehicleWidget extends StatefulWidget {
 
 class _VehicleWidgetState extends State<VehicleWidget> {
   Widget get lead {
-    bool typeItem = (widget.type == VehicleEnum.motorcycle);
-    Color color = typeItem ? OneColors.success : OneColors.primary;
+    Color color = widget.type == VehicleEnum.motorcycle
+        ? OneColors.success
+        : OneColors.primary;
     Color backGround = color.withAlpha(90);
 
     if (widget.type == VehicleEnum.motorcycle) {
@@ -38,6 +41,20 @@ class _VehicleWidgetState extends State<VehicleWidget> {
         child: Icon(LucideIcons.motorbike, color: color),
       );
     }
+
+    if (widget.type == VehicleEnum.truck) {
+      color = OneColors.warning;
+      backGround = color.withAlpha(90);
+      return Container(
+        padding: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: backGround,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Icon(LucideIcons.truck, color: color),
+      );
+    }
+
     return Container(
       padding: EdgeInsets.all(8),
       decoration: BoxDecoration(
@@ -56,11 +73,11 @@ class _VehicleWidgetState extends State<VehicleWidget> {
   @override
   Widget build(BuildContext context) {
     return OneListTile(
-      title: 'GOL - PLA-123',
+      title: '${widget.model} - ${widget.plate}',
       leading: lead,
       actions: [TimerWidget(timer: widget.dateTime)],
       onTap: widget.onTap,
-      children: [OneText.caption('06/12/2025 12:00h')],
+      children: [OneText.caption(widget.dateTime.formated)],
     );
   }
 }
