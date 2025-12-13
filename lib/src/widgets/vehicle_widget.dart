@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:one_ds/one_ds.dart';
+import 'package:parking/core/enum/type_charge_enum.dart';
 import 'package:parking/core/enum/vehicle_enum.dart';
 import 'package:parking/core/extension/date_timer.dart';
 
@@ -13,12 +14,14 @@ class VehicleWidget extends StatefulWidget {
     required this.onTap,
     required this.plate,
     required this.model,
+    required this.typeCharge,
   });
   final VehicleEnum type;
   final DateTime dateTime;
   final VoidCallback onTap;
   final String plate;
   final String model;
+  final TypeChargeEnum typeCharge;
 
   @override
   State<VehicleWidget> createState() => _VehicleWidgetState();
@@ -73,9 +76,11 @@ class _VehicleWidgetState extends State<VehicleWidget> {
   @override
   Widget build(BuildContext context) {
     return OneListTile(
-      title: '${widget.model} - ${widget.plate}',
+      title: '${widget.model.trim()} - ${widget.plate.trim()}',
       leading: lead,
-      actions: [TimerWidget(timer: widget.dateTime)],
+      actions: [
+        TimerWidget(timer: widget.dateTime, typeCharge: widget.typeCharge),
+      ],
       onTap: widget.onTap,
       children: [OneText.caption(widget.dateTime.formated)],
     );

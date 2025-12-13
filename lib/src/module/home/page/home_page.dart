@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:one_ds/core/ui/index.dart';
 import 'package:one_ds/one_ds.dart';
+import 'package:parking/core/enum/type_charge_enum.dart';
 import 'package:parking/core/enum/vehicle_enum.dart';
 import 'package:parking/core/utils/launch.dart';
 import 'package:parking/main.dart';
@@ -240,6 +241,18 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  TypeChargeEnum typeChargeEnum(int type) {
+    switch (type) {
+      case 1:
+        return TypeChargeEnum.fix;
+      case 2:
+        return TypeChargeEnum.hour;
+
+      default:
+        return TypeChargeEnum.day;
+    }
+  }
+
   void initFocusNode() {
     focusNode.addListener(() {
       if (focusNode.hasFocus) {
@@ -319,6 +332,7 @@ class _HomePageState extends State<HomePage> {
                       onTap: () => showAction(ticket),
                       plate: ticket.plate!,
                       model: ticket.model!,
+                      typeCharge: typeChargeEnum(ticket.valueType!),
                     );
                   }).toList(),
                 );
