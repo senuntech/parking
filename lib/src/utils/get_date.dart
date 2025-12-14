@@ -1,0 +1,44 @@
+import 'package:calendar_date_picker2/calendar_date_picker2.dart';
+import 'package:flutter/material.dart';
+import 'package:one_ds/core/index.dart';
+import 'package:parking/src/module/reports/presenters/controller/reports_controller.dart';
+
+Future<void> showDatePickerApp(
+  BuildContext context,
+  ReportsController reportsController,
+  Function(DateTime first, DateTime last) onSelected,
+  DateTime first,
+  DateTime last,
+) async {
+  OneBottomSheet.show(
+    context: context,
+    title: 'Selecionar Data',
+    content: [
+      CalendarDatePicker2(
+        config: CalendarDatePicker2Config(
+          calendarType: CalendarDatePicker2Type.range,
+          selectedDayHighlightColor: OneColors.primary,
+        ),
+        value: [first, last],
+        onValueChanged: (dates) {
+          onSelected(dates.first, dates.last);
+        },
+      ),
+      OneDivider(),
+      Align(
+        alignment: .centerRight,
+        child: Padding(
+          padding: .all(8.0),
+          child: OneButton(
+            onPressed: () async {
+              Navigator.pop(context);
+              await reportsController.getOrderByDate(first, last);
+            },
+            label: 'Selecionar',
+            style: OneButtonStyle.primary,
+          ),
+        ),
+      ),
+    ],
+  );
+}

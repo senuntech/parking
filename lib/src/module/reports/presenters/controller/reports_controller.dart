@@ -8,6 +8,8 @@ class ReportsController extends ChangeNotifier {
   final BriteDatabase briteDb;
   ReportsController({required this.briteDb});
   bool isProgress = false;
+  DateTime first = DateTime.now();
+  DateTime last = DateTime.now();
 
   List<OrderTicketModel> listOrder = [];
   List<OrderTicketModel> listOrderMonth = [];

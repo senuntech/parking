@@ -1,9 +1,14 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:one_ds/one_ds.dart';
-import 'package:parking/core/utils/launch.dart';
+import 'package:parking/src/module/printer/presenters/page/printer_page.dart';
+import 'package:parking/src/module/printer/utils/generate_receipt.dart';
 import 'package:parking/src/module/receipt/widgets/receipt_widget.dart';
+import 'package:parking/src/module/settings/controller/settings_controller.dart';
+import 'package:parking/src/module/settings/model/settings_model.dart';
 import 'package:parking/src/module/ticket/model/order_ticket_model.dart';
+import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
+import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:widgets_to_image/widgets_to_image.dart';
 
@@ -18,6 +23,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
   bool isExist = false;
   OrderTicketModel? orderTicketModel;
   final controller = WidgetsToImageController();
+  late SettingsModel settings;
 
   Future<bool> shared() async {
     try {
@@ -46,6 +52,25 @@ class _ReceiptPageState extends State<ReceiptPage> {
     }
   }
 
+  void onPrint() async {
+    if (deviceMacAddress.isEmpty) {
+      ShowSnakBar.show(
+        context,
+        message: 'Impressora não encontrada',
+        type: .warning,
+      );
+      return;
+    }
+    final text = await printerReceipit(settings, orderTicketModel!, false);
+    await PrintBluetoothThermal.writeBytes(text);
+  }
+
+  @override
+  void initState() {
+    settings = context.read<SettingsController>().settingsModel;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)?.settings.arguments;
@@ -67,7 +92,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
             icon: LucideIcons.share2,
             onPressed: shared,
           ),
-          OneMiniButton(icon: LucideIcons.printer, onPressed: () {}),
+          OneMiniButton(icon: LucideIcons.printer, onPressed: onPrint),
         ],
       ),
       body: OneBody(

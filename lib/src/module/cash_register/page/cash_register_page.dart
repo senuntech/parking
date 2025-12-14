@@ -8,6 +8,7 @@ import 'package:parking/main.dart';
 import 'package:parking/src/module/reports/presenters/controller/reports_controller.dart';
 import 'package:parking/src/module/ticket/controller/ticket_controller.dart';
 import 'package:parking/src/module/ticket/model/order_ticket_model.dart';
+import 'package:parking/src/utils/get_date.dart';
 import 'package:parking/src/utils/get_type_icon.dart';
 import 'package:provider/provider.dart';
 
@@ -24,7 +25,7 @@ class _CashRegisterPageState extends State<CashRegisterPage> {
   late ReportsController reportsController;
   late TicketController ticketController;
 
-  Future<void> showDatePicker() async {
+  /* Future<void> showDatePicker() async {
     OneBottomSheet.show(
       context: context,
       title: 'Selecionar Data',
@@ -58,7 +59,7 @@ class _CashRegisterPageState extends State<CashRegisterPage> {
         ),
       ],
     );
-  }
+  } */
 
   @override
   void initState() {
@@ -97,7 +98,17 @@ class _CashRegisterPageState extends State<CashRegisterPage> {
         actions: [
           OneMiniButton(
             icon: LucideIcons.calendarDays,
-            onPressed: showDatePicker,
+            onPressed: () => showDatePickerApp(
+              context,
+              reportsController,
+              (first, last) {
+                this.first = first;
+                this.last = last;
+                setState(() {});
+              },
+              first,
+              last,
+            ),
           ),
           OneMiniButton(
             icon: LucideIcons.printer,

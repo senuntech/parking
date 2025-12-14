@@ -7,6 +7,7 @@ import 'package:parking/src/module/category/controller/category_controller.dart'
 import 'package:parking/src/module/category/page/category_page.dart';
 import 'package:parking/src/module/home/controller/home_controller.dart';
 import 'package:parking/src/module/home/page/home_page.dart';
+import 'package:parking/src/module/printer/presenters/page/printer_page.dart';
 import 'package:parking/src/module/receipt/page/receipt_page.dart';
 import 'package:parking/src/module/reports/presenters/controller/reports_controller.dart';
 import 'package:parking/src/module/reports/presenters/page/reports_page.dart';
@@ -61,7 +62,7 @@ class MyApp extends StatelessWidget {
           Routes.category: (context) => CategoryPage(),
           Routes.reports: (context) => ReportsPage(),
           Routes.cashRegister: (context) => CashRegisterPage(),
-          //Routes.printer: (context) => PrinterPage(),
+          Routes.printer: (context) => PrinterPage(),
         },
       ),
     );

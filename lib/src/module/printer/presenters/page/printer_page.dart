@@ -1,16 +1,16 @@
-/* import 'dart:async';
+import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:bluetooth_print_plus/bluetooth_print_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:one_ds/one_ds.dart';
 import 'package:parking/src/module/printer/presenters/widget/empty_search_printer.dart';
 import 'package:parking/src/module/printer/presenters/widget/item_printer.dart';
 import 'package:parking/src/module/printer/presenters/widget/printer_connected.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 
-BluetoothDevice? devicePrinter;
+String deviceMacAddress = '';
 
 class PrinterPage extends StatefulWidget {
   const PrinterPage({super.key});
@@ -20,90 +20,58 @@ class PrinterPage extends StatefulWidget {
 }
 
 class _PrinterPageState extends State<PrinterPage> {
-  late StreamSubscription<ConnectState> _connectStateSubscription;
-  late StreamSubscription<List<BluetoothDevice>> _scanResultsSubscription;
-  List<BluetoothDevice> _scanResults = [];
+  bool connected = false;
+  List<BluetoothInfo> items = [];
+  bool _progress = false;
+  final String _msj = "";
 
   late StreamSubscription<bool> _isScanningSubscription;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) => initBluetoothPrintPlusListen(),
-    );
   }
 
   @override
   void dispose() {
     super.dispose();
-    _connectStateSubscription.cancel();
-    _scanResultsSubscription.cancel();
-    _isScanningSubscription.cancel();
-    _scanResults.clear();
-  }
-
-  Future<void> initBluetoothPrintPlusListen() async {
-    var status = await Permission.bluetoothConnect.request();
-    if (status == .granted) {
-      print('permitido');
-    }
-
-    _scanResultsSubscription = BluetoothPrintPlus.scanResults.listen((event) {
-      if (mounted) {
-        setState(() {
-          print('********** DISPOSITIVOS: $event **********');
-          _scanResults = event;
-        });
-      }
-    });
-    _isScanningSubscription = BluetoothPrintPlus.isScanning.listen((event) {
-      print('********** isScanning: $event **********');
-      if (mounted) {
-        setState(() {});
-      }
-    });
-
-    _connectStateSubscription = BluetoothPrintPlus.connectState.listen((event) {
-      print('********** connectState change: $event **********');
-      switch (event) {
-        case ConnectState.connected:
-          setState(() {
-            if (devicePrinter == null) return;
-          });
-          break;
-        case ConnectState.disconnected:
-          break;
-      }
-    });
   }
 
   Widget get getBody {
-    if (devicePrinter != null) {
+    if (deviceMacAddress.isNotEmpty) {
       return PrinterConnected(
         onTap: () async {
-          await BluetoothPrintPlus.disconnect();
-          devicePrinter = null;
+          await PrintBluetoothThermal.disconnect;
+          deviceMacAddress = '';
           setState(() {});
         },
       );
     }
-    if (_scanResults.isEmpty) {
+    if (_progress && items.isEmpty) {
+      return Padding(
+        padding: .only(top: MediaQuery.of(context).size.height * .3),
+        child: const OneDotsLoader(),
+      );
+    }
+    if (items.isEmpty) {
       return EmptySearchPrinter();
     }
-    if (BluetoothPrintPlus.isBlueOn) {
+    if (!_progress) {
       return ListView.builder(
         shrinkWrap: true,
-        itemCount: _scanResults.length,
+        itemCount: items.length,
         itemBuilder: (context, index) {
-          BluetoothDevice item = _scanResults.elementAt(index);
+          BluetoothInfo item = items.elementAt(index);
           return ItemPrinter(
             onTap: () async {
-              await BluetoothPrintPlus.connect(item);
-              devicePrinter = item;
+              deviceMacAddress = item.macAdress;
+              setState(() {});
+              await PrintBluetoothThermal.connect(
+                macPrinterAddress: item.macAdress,
+              );
             },
             title: item.name,
-            subTitle: Platform.isAndroid ? item.address : 'Impressora',
+            subTitle: Platform.isAndroid ? item.macAdress : 'Impressora',
           );
         },
       );
@@ -127,16 +95,21 @@ class _PrinterPageState extends State<PrinterPage> {
     );
   }
 
-  Future onScanPressed() async {
-    try {
-      if (BluetoothPrintPlus.isScanningNow) {
-        await BluetoothPrintPlus.stopScan();
-        return;
-      }
-      await BluetoothPrintPlus.startScan(timeout: Duration(seconds: 10));
-    } catch (e) {
-      print("onScanPressed error: $e");
-    }
+  Future<void> onScanPressed() async {
+    setState(() {
+      _progress = true;
+      items = [];
+    });
+    final List<BluetoothInfo> listResult =
+        await PrintBluetoothThermal.pairedBluetooths;
+
+    setState(() {
+      _progress = false;
+    });
+
+    setState(() {
+      items = listResult;
+    });
   }
 
   ({Color? colors, Widget icon, String label}) get buttonState {
@@ -168,7 +141,7 @@ class _PrinterPageState extends State<PrinterPage> {
       ),
       body: OneBody(child: getBody),
       floatingActionButtonLocation: .centerFloat,
-      floatingActionButton: devicePrinter != null
+      floatingActionButton: _progress || deviceMacAddress.isNotEmpty
           ? null
           : FloatingActionButton.extended(
               onPressed: onScanPressed,
@@ -179,4 +152,3 @@ class _PrinterPageState extends State<PrinterPage> {
     );
   }
 }
- */

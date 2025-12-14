@@ -10,6 +10,7 @@ import 'package:parking/core/utils/get_pix.dart';
 import 'package:parking/src/module/settings/controller/settings_controller.dart';
 import 'package:parking/src/module/settings/model/settings_model.dart';
 import 'package:parking/src/module/ticket/model/order_ticket_model.dart';
+import 'package:parking/src/utils/vehicle_utils.dart';
 import 'package:provider/provider.dart';
 
 class ReceiptWidget extends StatelessWidget {
@@ -22,41 +23,11 @@ class ReceiptWidget extends StatelessWidget {
   final bool isExist;
   final OrderTicketModel? orderTicketModel;
 
-  VehicleEnum get vehicle {
-    if (orderTicketModel?.typeVehicles == VehicleEnum.car.id) {
-      return VehicleEnum.car;
-    }
-    if (orderTicketModel?.typeVehicles == VehicleEnum.motorcycle.id) {
-      return VehicleEnum.motorcycle;
-    }
-    return VehicleEnum.truck;
-  }
-
   File? getImage(SettingsModel settingsModel) {
     if (settingsModel.image_path != null) {
       return File(settingsModel.image_path!);
     }
     return null;
-  }
-
-  int get getDay {
-    return DateTime.now().difference(orderTicketModel!.createdAt!).inDays;
-  }
-
-  int get getMinutes {
-    return DateTime.now().difference(orderTicketModel!.createdAt!).inMinutes;
-  }
-
-  double get getTotal {
-    double price = orderTicketModel!.price!;
-    if (orderTicketModel?.valueType == TypeChargeEnum.fix.type) {
-      return price;
-    }
-    if (orderTicketModel?.valueType == TypeChargeEnum.day.type) {
-      return price * getDay;
-    }
-    double value = price / 60;
-    return value * getMinutes;
   }
 
   @override
@@ -91,46 +62,37 @@ class ReceiptWidget extends StatelessWidget {
               OneSize.height8,
 
               OneText.heading1(
-                orderTicketModel?.exitAt != null ? 'SAÍDA' : 'ENTRADA',
+                orderTicketModel!.exitAt != null ? 'SAÍDA' : 'ENTRADA',
                 textAlign: .center,
               ),
 
-              OneText.caption(vehicle.name, textAlign: .center),
+              OneText.caption(getDate(orderTicketModel!), textAlign: .center),
+
               OneText.caption(
-                ' ${orderTicketModel?.model} - ${orderTicketModel?.plate}',
+                getVehicle(orderTicketModel!.typeVehicles!).name,
+                textAlign: .center,
+              ),
+              OneText.caption(
+                ' ${orderTicketModel!.model} - ${orderTicketModel!.plate}',
                 textAlign: .center,
               ),
               if (orderTicketModel?.exitAt != null) ...[
                 OneText.heading2(
-                  'Total: ${UtilBrasilFields.obterReal(getTotal)}',
+                  'Total: ${UtilBrasilFields.obterReal(getTotal(orderTicketModel!))}',
                   textAlign: .center,
                 ),
               ],
 
               OneSize.height8,
-              OneText.caption(
-                'Entrada: ${orderTicketModel?.createdAt?.formated}',
-                textAlign: .center,
-              ),
-              if (orderTicketModel?.exitAt != null)
-                OneText.caption(
-                  'Saída: ${orderTicketModel?.exitAt?.formated}',
-                  textAlign: .center,
-                ),
-
-              OneSize.height8,
-              OneText.heading3(
-                'Cliente: ${orderTicketModel?.name}',
-                textAlign: .center,
-              ),
+              OneText.heading3(orderTicketModel!.name!, textAlign: .center),
               if ((controller.settingsModel.show_pix ?? false) &&
-                  orderTicketModel?.exitAt != null) ...[
+                  orderTicketModel!.exitAt != null) ...[
                 Center(
                   child: QrImageView(
                     data: getPix(
                       type: 1,
                       pix: controller.settingsModel.my_pix!,
-                      value: getTotal,
+                      value: getTotal(orderTicketModel!),
                     ),
                     version: QrVersions.auto,
                     size: 120,
