@@ -40,7 +40,9 @@ class OrderTicketModel {
       createdAt: map['created_at'] != null
           ? DateTime.fromMillisecondsSinceEpoch(map['created_at'] as int)
           : null,
-      exitAt: map['exit_at'],
+      exitAt: map['exit_at'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['exit_at'] as int)
+          : null,
       code: map['code'],
       price: map['price'],
     );
@@ -57,7 +59,7 @@ class OrderTicketModel {
       'plate': plate,
       'value_type': valueType,
       'created_at': createdAt?.millisecondsSinceEpoch,
-      'exit_at': exitAt?.microsecondsSinceEpoch,
+      'exit_at': exitAt?.millisecondsSinceEpoch,
       'code': code,
       'price': price,
     };

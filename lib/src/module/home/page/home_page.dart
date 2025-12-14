@@ -68,7 +68,9 @@ class _HomePageState extends State<HomePage> {
               OneListTile(
                 title: 'Relatórios',
                 leading: Icon(LucideIcons.chartColumnBig),
-                onTap: () {},
+                onTap: () {
+                  Navigator.popAndPushNamed(context, Routes.reports);
+                },
                 showDivider: false,
               ),
               OneListTile(

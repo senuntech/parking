@@ -1,13 +1,10 @@
 import 'dart:io';
-
-import 'package:barcode/barcode.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:one_ds/one_ds.dart';
 import 'package:parking/core/enum/type_charge_enum.dart';
 import 'package:parking/core/enum/vehicle_enum.dart';
 import 'package:parking/core/extension/date_timer.dart';
-import 'package:parking/core/extension/duration_extension.dart';
 import 'package:parking/core/extension/string_extension.dart';
 import 'package:parking/core/utils/get_pix.dart';
 import 'package:parking/src/module/settings/controller/settings_controller.dart';
@@ -32,7 +29,7 @@ class ReceiptWidget extends StatelessWidget {
     if (orderTicketModel?.typeVehicles == VehicleEnum.motorcycle.id) {
       return VehicleEnum.motorcycle;
     }
-    return VehicleEnum.car;
+    return VehicleEnum.truck;
   }
 
   File? getImage(SettingsModel settingsModel) {
