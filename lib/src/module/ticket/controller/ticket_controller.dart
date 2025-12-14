@@ -81,4 +81,21 @@ class TicketController extends ChangeNotifier {
     resultSearch = tickets;
     notifyListeners();
   }
+
+  Future<OrderTicketModel> exitTicket(int id) async {
+    final OrderTicketModel orderTicketModel = tickets.firstWhere(
+      (element) => element.id == id,
+    );
+    orderTicketModel.exitAt = DateTime.now();
+
+    await briteDb.update(
+      'order_ticket',
+      orderTicketModel.toMap(),
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+    await getTickets();
+
+    return orderTicketModel;
+  }
 }

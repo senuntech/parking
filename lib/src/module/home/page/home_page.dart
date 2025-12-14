@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:one_ds/core/ui/index.dart';
 import 'package:one_ds/one_ds.dart';
+import 'package:parking/core/enum/payment_method_enum.dart';
 import 'package:parking/core/enum/type_charge_enum.dart';
 import 'package:parking/core/enum/vehicle_enum.dart';
 import 'package:parking/core/utils/launch.dart';
@@ -155,11 +157,8 @@ class _HomePageState extends State<HomePage> {
 
             children: [OneText('Da saída no veículo')],
             onTap: () {
-              Navigator.popAndPushNamed(
-                context,
-                Routes.receipt,
-                arguments: orderTicketModel,
-              );
+              Navigator.pop(context);
+              onExit(orderTicketModel.id!, orderTicketModel.model!);
             },
           ),
         ),
@@ -229,6 +228,19 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void onExit(int id, String name) {
+    ShowAlert.show(
+      context,
+      title: 'Retirar $name',
+      message: 'Deseja retirar o veículo?',
+      labelYes: 'Sim',
+      labelNo: 'Não',
+      onYes: () {
+        onPayment(id, name);
+      },
+    );
+  }
+
   VehicleEnum vehicleEnum(int type) {
     switch (type) {
       case 1:
@@ -269,6 +281,79 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     initFocusNode();
+  }
+
+  // forma de pagamento
+  void onPayment(int id, String name) {
+    int typeCharge = 1;
+
+    OneBottomSheet.show(
+      context: context,
+      title: 'Forma de pagamento',
+
+      content: [
+        StatefulBuilder(
+          builder: (context, setState) {
+            return Column(
+              children: [
+                CheckboxListTile(
+                  value: PaymentMethodEnum.pix.id == typeCharge,
+                  onChanged: (value) {
+                    setState(() {
+                      typeCharge = PaymentMethodEnum.pix.id;
+                    });
+                  },
+                  title: OneText('Pix'),
+                ),
+                CheckboxListTile(
+                  value: PaymentMethodEnum.cash.id == typeCharge,
+                  onChanged: (value) {
+                    setState(() {
+                      typeCharge = PaymentMethodEnum.cash.id;
+                    });
+                  },
+                  title: OneText('Dinheiro'),
+                ),
+
+                CheckboxListTile(
+                  value: PaymentMethodEnum.card.id == typeCharge,
+                  onChanged: (value) {
+                    setState(() {
+                      typeCharge = PaymentMethodEnum.card.id;
+                    });
+                  },
+                  title: OneText('Cartão'),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Align(
+                    alignment: .centerRight,
+                    child: SizedBox(
+                      height: 50,
+                      child: OneButton(
+                        label: 'Confirmar',
+                        style: OneButtonStyle.outlined,
+                        onPressed: () async {
+                          final order = await context
+                              .read<TicketController>()
+                              .exitTicket(id);
+                          Navigator.popAndPushNamed(
+                            context,
+                            Routes.receipt,
+                            arguments: order,
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      ],
+    );
   }
 
   @override

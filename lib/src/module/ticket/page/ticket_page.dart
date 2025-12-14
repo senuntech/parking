@@ -8,9 +8,12 @@ import 'package:one_ds/one_ds.dart'
         OneText,
         TelefoneInputFormatter,
         PlacaVeiculoInputFormatter;
+import 'package:parking/core/enum/type_charge_enum.dart';
 
 import 'package:parking/core/utils/validator.dart';
 import 'package:parking/main.dart';
+import 'package:parking/src/module/category/controller/category_controller.dart';
+import 'package:parking/src/module/category/model/category_model.dart';
 import 'package:parking/src/module/ticket/controller/ticket_controller.dart';
 import 'package:parking/src/module/ticket/model/order_ticket_model.dart';
 import 'package:provider/provider.dart';
@@ -32,23 +35,37 @@ class _TicketPageState extends State<TicketPage> {
   final securityController = TextEditingController();
   final modelController = TextEditingController();
   final plateController = TextEditingController();
-  OrderTicketModel? orderTicketModel;
+  OrderTicketModel orderTicketModel = OrderTicketModel();
   final ScrollController scrollController = ScrollController();
 
   bool showButton = false;
+  CategoryModel? categoryModel;
 
   void setValue(int? value) {
     setState(() {
       valueType = value ?? 0;
-      orderTicketModel?.valueType = valueType;
+      orderTicketModel.valueType = valueType;
     });
+    if (valueType == TypeChargeEnum.fix.type) {
+      orderTicketModel.price = categoryModel!.singlePrice!;
+    }
+    if (valueType == TypeChargeEnum.hour.type) {
+      orderTicketModel.price = categoryModel!.hourlyRate!;
+    }
+    if (valueType == TypeChargeEnum.day.type) {
+      orderTicketModel.price = categoryModel!.dayPrice!;
+    }
   }
 
   void setTypeCar(int? value) {
     setState(() {
       typeVehicles = value ?? 0;
-      orderTicketModel?.typeVehicles = typeVehicles;
+      orderTicketModel.typeVehicles = typeVehicles;
     });
+    categoryModel = context.read<CategoryController>().categories.firstWhere(
+      (element) => element.id == valueType,
+    );
+    setValue(valueType);
   }
 
   void onSave() {
@@ -57,8 +74,8 @@ class _TicketPageState extends State<TicketPage> {
     }
     formKey.currentState!.save();
 
-    if (orderTicketModel?.id != null) {
-      ticketController.updateTicket(orderTicketModel!);
+    if (orderTicketModel.id != null) {
+      ticketController.updateTicket(orderTicketModel);
       Navigator.popAndPushNamed(
         context,
         Routes.receipt,
@@ -75,8 +92,9 @@ class _TicketPageState extends State<TicketPage> {
       plate: plateController.text,
       typeVehicles: typeVehicles,
       createdAt: DateTime.now(),
+      price: orderTicketModel.price,
     );
-    ticketController.addTicket(orderTicketModel!);
+    ticketController.addTicket(orderTicketModel);
     Navigator.popAndPushNamed(
       context,
       Routes.receipt,
@@ -88,6 +106,10 @@ class _TicketPageState extends State<TicketPage> {
   void initState() {
     super.initState();
     ticketController = context.read<TicketController>();
+    categoryModel = context.read<CategoryController>().categories.firstWhere(
+      (element) => element.id == typeVehicles,
+    );
+    orderTicketModel.price = categoryModel!.singlePrice;
 
     scrollController.addListener(() {
       final noFinal =
@@ -155,7 +177,7 @@ class _TicketPageState extends State<TicketPage> {
                     hintText: 'Ex: Paulo',
                     validator: validatorRequired,
                     onSaved: (value) {
-                      orderTicketModel?.name = value;
+                      orderTicketModel.name = value;
                     },
                     controller: nameController,
                     inputFormatters: [
@@ -171,7 +193,7 @@ class _TicketPageState extends State<TicketPage> {
                     hintText: 'Ex: 11999999999',
                     validator: validatorRequired,
                     onSaved: (value) {
-                      orderTicketModel?.phone = value;
+                      orderTicketModel.phone = value;
                     },
                     controller: phoneController,
                     keyboardType: TextInputType.phone,
@@ -186,7 +208,7 @@ class _TicketPageState extends State<TicketPage> {
                     hintText: 'CPF do Responsável',
                     validator: validatorRequired,
                     onSaved: (value) {
-                      orderTicketModel?.document = value;
+                      orderTicketModel.document = value;
                     },
                     controller: securityController,
                     keyboardType: TextInputType.number,
@@ -244,7 +266,7 @@ class _TicketPageState extends State<TicketPage> {
                     hintText: 'Ex: Gol',
                     validator: validatorRequired,
                     onSaved: (value) {
-                      orderTicketModel?.model = value;
+                      orderTicketModel.model = value;
                     },
                     controller: modelController,
                     inputFormatters: [UpperCaseTextFormatter()],
@@ -255,7 +277,7 @@ class _TicketPageState extends State<TicketPage> {
                     hintText: 'Ex: XXXX-XXX',
                     validator: validatorRequired,
                     onSaved: (value) {
-                      orderTicketModel?.plate = value;
+                      orderTicketModel.plate = value;
                     },
                     controller: plateController,
                     keyboardType: TextInputType.name,

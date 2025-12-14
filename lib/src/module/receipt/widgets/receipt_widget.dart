@@ -4,8 +4,10 @@ import 'package:barcode/barcode.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:one_ds/one_ds.dart';
+import 'package:parking/core/enum/type_charge_enum.dart';
 import 'package:parking/core/enum/vehicle_enum.dart';
 import 'package:parking/core/extension/date_timer.dart';
+import 'package:parking/core/extension/duration_extension.dart';
 import 'package:parking/core/extension/string_extension.dart';
 import 'package:parking/core/utils/get_pix.dart';
 import 'package:parking/src/module/settings/controller/settings_controller.dart';
@@ -38,6 +40,26 @@ class ReceiptWidget extends StatelessWidget {
       return File(settingsModel.image_path!);
     }
     return null;
+  }
+
+  int get getDay {
+    return DateTime.now().difference(orderTicketModel!.createdAt!).inDays;
+  }
+
+  int get getMinutes {
+    return DateTime.now().difference(orderTicketModel!.createdAt!).inMinutes;
+  }
+
+  double get getTotal {
+    double price = orderTicketModel!.price!;
+    if (orderTicketModel?.valueType == TypeChargeEnum.fix.type) {
+      return price;
+    }
+    if (orderTicketModel?.valueType == TypeChargeEnum.day.type) {
+      return price * getDay;
+    }
+
+    return price * getMinutes;
   }
 
   @override
@@ -75,7 +97,14 @@ class ReceiptWidget extends StatelessWidget {
                 orderTicketModel?.exitAt != null ? 'SAÍDA' : 'ENTRADA',
                 textAlign: .center,
               ),
+
               OneText.caption(vehicle.name, textAlign: .center),
+              if (orderTicketModel?.exitAt != null) ...[
+                OneText.heading2(
+                  'Total: ${UtilBrasilFields.obterReal(getTotal)}',
+                  textAlign: .center,
+                ),
+              ],
               OneSize.height8,
               OneText.caption(
                 'Modelo: ${orderTicketModel?.model} - ${orderTicketModel?.plate}',
@@ -90,25 +119,28 @@ class ReceiptWidget extends StatelessWidget {
                   'Saída: ${orderTicketModel?.exitAt?.formated}',
                   textAlign: .center,
                 ),
+
               OneSize.height8,
               OneText.heading3(
                 'Cliente: ${orderTicketModel?.name}',
                 textAlign: .center,
               ),
-              if (orderTicketModel?.exitAt != null) ...[
+              if ((controller.settingsModel.show_pix ?? false) &&
+                  orderTicketModel?.exitAt != null) ...[
                 Center(
                   child: QrImageView(
                     data: getPix(
                       type: 1,
                       pix: controller.settingsModel.my_pix!,
-                      value: 0,
+                      value: getTotal,
                     ),
                     version: QrVersions.auto,
                     size: 120,
                   ),
                 ),
                 OneText.caption('Pague com Pix', textAlign: .center),
-              ] else ...[
+              ],
+              if (orderTicketModel?.exitAt == null) ...[
                 OneSize.height4,
                 Center(
                   child: BarcodeWidget(
