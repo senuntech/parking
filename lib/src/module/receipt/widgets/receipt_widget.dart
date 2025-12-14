@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:barcode/barcode.dart';
+import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:one_ds/one_ds.dart';
 import 'package:parking/core/enum/vehicle_enum.dart';
@@ -93,7 +95,7 @@ class ReceiptWidget extends StatelessWidget {
                 'Cliente: ${orderTicketModel?.name}',
                 textAlign: .center,
               ),
-              if (controller.settingsModel.show_pix ?? false) ...[
+              if (orderTicketModel?.exitAt != null) ...[
                 Center(
                   child: QrImageView(
                     data: getPix(
@@ -106,6 +108,16 @@ class ReceiptWidget extends StatelessWidget {
                   ),
                 ),
                 OneText.caption('Pague com Pix', textAlign: .center),
+              ] else ...[
+                OneSize.height4,
+                Center(
+                  child: BarcodeWidget(
+                    barcode: Barcode.codabar(),
+                    data: orderTicketModel!.code!,
+                    width: 200,
+                    height: 100,
+                  ),
+                ),
               ],
               OneText.bodyText(DateTime.now().formated, textAlign: .center),
               OneText.caption(

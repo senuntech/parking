@@ -35,6 +35,9 @@ dependencies:
   in_app_purchase: ^3.2.3
   url_launcher: ^6.3.2
   upgrader: ^12.3.0
+  mobile_scanner: ^7.1.4
+  barcode_widget: ^2.0.4
+  lottie: ^3.3.2
 
 dev_dependencies:
   flutter_test:
@@ -48,7 +51,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
+  assets:
+    - assets/lottie/scanner.json
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

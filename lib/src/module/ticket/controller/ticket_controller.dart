@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:parking/src/module/ticket/model/order_ticket_model.dart';
 import 'package:sqlbrite/sqlbrite.dart';
@@ -13,6 +15,7 @@ class TicketController extends ChangeNotifier {
     if (tickets.any((element) => element.plate == orderTicketModel.plate)) {
       return;
     }
+    orderTicketModel.code = Random().nextInt(100000).toString();
 
     await briteDb.insert('order_ticket', orderTicketModel.toMap());
     getTickets();
@@ -57,5 +60,25 @@ class TicketController extends ChangeNotifier {
 
     notifyListeners();
     return resultSearch;
+  }
+
+  Future<void> getTicketByCode(String code) async {
+    final List<Map<String, dynamic>> maps = await briteDb.query(
+      'order_ticket',
+      where: 'code = ?',
+      whereArgs: [code],
+    );
+    if (maps.isEmpty) {
+      resultSearch = [];
+      notifyListeners();
+      return;
+    }
+    resultSearch = maps.map((map) => OrderTicketModel.fromMap(map)).toList();
+    notifyListeners();
+  }
+
+  void reset() {
+    resultSearch = tickets;
+    notifyListeners();
   }
 }

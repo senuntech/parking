@@ -26,6 +26,7 @@ String orderTicket = '''
     value_type INTEGER,
     exit_at DATE,
     type_vehicles INTEGER,
+    code TEXT,
     FOREIGN KEY(type_vehicles) REFERENCES vehicles(id)
   )
 ''';
