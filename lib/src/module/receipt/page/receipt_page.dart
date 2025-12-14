@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:one_ds/one_ds.dart';
+import 'package:parking/core/utils/launch.dart';
 import 'package:parking/src/module/receipt/widgets/receipt_widget.dart';
 import 'package:parking/src/module/ticket/model/order_ticket_model.dart';
 import 'package:share_plus/share_plus.dart';
@@ -32,7 +33,9 @@ class _ReceiptPageState extends State<ReceiptPage> {
 
       final params = ShareParams(
         files: [XFile.fromData(bytes!)],
+        text: 'Segue seu comprovante de estacionamento 📸',
         fileNameOverrides: ['comprovante.png'],
+        subject: 'com.whatsapp',
         excludedCupertinoActivities: [CupertinoActivityType.message],
       );
 

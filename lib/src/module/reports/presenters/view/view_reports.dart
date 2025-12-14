@@ -76,10 +76,6 @@ class _ViewReportsState extends State<ViewReports> {
                       '${settingsModel.phone.orEmpty} | CPF/CNPJ: ${settingsModel.document.orEmpty}',
                       style: const pw.TextStyle(fontSize: 10),
                     ),
-                    pw.Text(
-                      settingsModel.text_receipt.orEmpty,
-                      style: const pw.TextStyle(fontSize: 10),
-                    ),
                   ],
                 ),
                 if (logo != null) pw.Center(child: pw.Image(logo, height: 60)),
@@ -113,6 +109,7 @@ class _ViewReportsState extends State<ViewReports> {
         ),
 
         pw.SizedBox(height: 50),
+
         /* if (!publisherApp.isPurchased) ...[
           pw.Text(
             freeText,

@@ -55,8 +55,8 @@ class ReceiptWidget extends StatelessWidget {
     if (orderTicketModel?.valueType == TypeChargeEnum.day.type) {
       return price * getDay;
     }
-
-    return price * getMinutes;
+    double value = price / 60;
+    return value * getMinutes;
   }
 
   @override
@@ -96,17 +96,18 @@ class ReceiptWidget extends StatelessWidget {
               ),
 
               OneText.caption(vehicle.name, textAlign: .center),
+              OneText.caption(
+                ' ${orderTicketModel?.model} - ${orderTicketModel?.plate}',
+                textAlign: .center,
+              ),
               if (orderTicketModel?.exitAt != null) ...[
                 OneText.heading2(
                   'Total: ${UtilBrasilFields.obterReal(getTotal)}',
                   textAlign: .center,
                 ),
               ],
+
               OneSize.height8,
-              OneText.caption(
-                'Modelo: ${orderTicketModel?.model} - ${orderTicketModel?.plate}',
-                textAlign: .center,
-              ),
               OneText.caption(
                 'Entrada: ${orderTicketModel?.createdAt?.formated}',
                 textAlign: .center,
