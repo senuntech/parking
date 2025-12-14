@@ -82,11 +82,12 @@ class TicketController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<OrderTicketModel> exitTicket(int id) async {
+  Future<OrderTicketModel> exitTicket(int id, int paymentMethod) async {
     final OrderTicketModel orderTicketModel = tickets.firstWhere(
       (element) => element.id == id,
     );
     orderTicketModel.exitAt = DateTime.now();
+    orderTicketModel.paymentMethod = paymentMethod;
 
     await briteDb.update(
       'order_ticket',

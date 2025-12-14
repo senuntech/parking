@@ -105,4 +105,26 @@ class ReportsController extends ChangeNotifier {
     await init();
     notifyListeners();
   }
+
+  double getTotalByType(int id) {
+    return listOrder.where((element) => element.paymentMethod == id).fold(0, (
+      previousValue,
+      element,
+    ) {
+      double price = element.price ?? 0;
+      return previousValue + price;
+    });
+  }
+
+  Future<void> returnVehicle(OrderTicketModel orderTicketModel) async {
+    orderTicketModel.exitAt = null;
+    await briteDb.update(
+      'order_ticket',
+      orderTicketModel.toMap(),
+      where: 'id = ?',
+      whereArgs: [orderTicketModel.id],
+    );
+
+    notifyListeners();
+  }
 }

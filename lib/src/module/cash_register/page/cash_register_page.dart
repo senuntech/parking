@@ -1,26 +1,28 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
+import 'package:one_ds/core/index.dart';
 import 'package:one_ds/one_ds.dart';
-import 'package:parking/core/enum/vehicle_enum.dart';
+import 'package:parking/core/enum/payment_method_enum.dart';
 import 'package:parking/core/extension/date_timer.dart';
 import 'package:parking/main.dart';
 import 'package:parking/src/module/reports/presenters/controller/reports_controller.dart';
-import 'package:parking/src/module/reports/presenters/view/view_reports.dart';
-import 'package:parking/src/module/reports/presenters/widget/chart_widget.dart';
+import 'package:parking/src/module/ticket/controller/ticket_controller.dart';
+import 'package:parking/src/module/ticket/model/order_ticket_model.dart';
 import 'package:parking/src/utils/get_type_icon.dart';
 import 'package:provider/provider.dart';
 
-class ReportsPage extends StatefulWidget {
-  const ReportsPage({super.key});
+class CashRegisterPage extends StatefulWidget {
+  const CashRegisterPage({super.key});
 
   @override
-  State<ReportsPage> createState() => _ReportsPageState();
+  State<CashRegisterPage> createState() => _CashRegisterPageState();
 }
 
-class _ReportsPageState extends State<ReportsPage> {
-  late ReportsController reportsController;
+class _CashRegisterPageState extends State<CashRegisterPage> {
   DateTime first = DateTime.now();
   DateTime last = DateTime.now();
+  late ReportsController reportsController;
+  late TicketController ticketController;
 
   Future<void> showDatePicker() async {
     OneBottomSheet.show(
@@ -61,6 +63,7 @@ class _ReportsPageState extends State<ReportsPage> {
   @override
   void initState() {
     reportsController = context.read<ReportsController>();
+    ticketController = context.read<TicketController>();
     WidgetsBinding.instance.addPostFrameCallback((_) => init());
     super.initState();
   }
@@ -69,15 +72,17 @@ class _ReportsPageState extends State<ReportsPage> {
     await reportsController.init();
   }
 
-  Future<void> onDelete(int id) async {
+  Future<void> returnVehicle(OrderTicketModel orderTicketModel) async {
     ShowAlert.show(
       context,
-      title: 'Deletar',
+      title: 'Retornar veículo',
+      message: 'Deseja devolver o veículo?',
       labelYes: 'Sim',
       labelNo: 'Não',
-      message: 'Deseja deletar este item?',
       onYes: () async {
-        await reportsController.delete(id);
+        await reportsController.returnVehicle(orderTicketModel);
+        await ticketController.getTickets();
+        await init();
       },
     );
   }
@@ -86,7 +91,7 @@ class _ReportsPageState extends State<ReportsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: OneAppBar(
-        title: 'Relatórios',
+        title: 'Caixa',
         subtitle: '${first.formatedDate} à ${last.formatedDate}',
         context: context,
         actions: [
@@ -95,45 +100,37 @@ class _ReportsPageState extends State<ReportsPage> {
             onPressed: showDatePicker,
           ),
           OneMiniButton(
-            icon: LucideIcons.fileChartColumn,
+            icon: LucideIcons.printer,
             color: OneColors.success,
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ViewReports(listDates: [first, last]),
-                ),
-              );
-            },
+            onPressed: () {},
           ),
         ],
       ),
       body: Consumer<ReportsController>(
         builder: (context, value, child) {
-          if (value.isProgress) {
-            return Center(child: CircularProgressIndicator());
-          }
-
           return OneBody(
             child: Column(
               crossAxisAlignment: .stretch,
               spacing: 16,
               children: [
-                OneCard(title: "Últimos Meses", children: [ChartWidget()]),
-
+                OneCard(
+                  title: 'Total',
+                  children: [
+                    OneText.heading2(
+                      UtilBrasilFields.obterReal(reportsController.getTotal),
+                    ),
+                  ],
+                ),
                 Row(
                   spacing: 16,
                   children: [
                     Expanded(
                       child: OneCard(
-                        title: "Soma Total",
+                        title: 'Pix',
                         children: [
                           OneText(
-                            UtilBrasilFields.obterReal(value.getTotal),
-                            style: TextStyle(
-                              fontSize: 25,
-                              color: Colors.green,
-                              fontWeight: .bold,
+                            UtilBrasilFields.obterReal(
+                              value.getTotalByType(PaymentMethodEnum.pix.id),
                             ),
                           ),
                         ],
@@ -141,14 +138,23 @@ class _ReportsPageState extends State<ReportsPage> {
                     ),
                     Expanded(
                       child: OneCard(
-                        title: DateTime.now().currentNameMonth,
+                        title: 'Dinheiro',
                         children: [
                           OneText(
-                            UtilBrasilFields.obterReal(value.getTotalMonth),
-                            style: TextStyle(
-                              fontSize: 25,
-                              color: Colors.green,
-                              fontWeight: .bold,
+                            UtilBrasilFields.obterReal(
+                              value.getTotalByType(PaymentMethodEnum.cash.id),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: OneCard(
+                        title: 'Cartão',
+                        children: [
+                          OneText(
+                            UtilBrasilFields.obterReal(
+                              value.getTotalByType(PaymentMethodEnum.card.id),
                             ),
                           ),
                         ],
@@ -157,17 +163,17 @@ class _ReportsPageState extends State<ReportsPage> {
                   ],
                 ),
                 OneCard(
-                  title: "Registros",
+                  title: "Histórico",
                   children: value.listOrder.map((e) {
                     return OneListTile(
                       title: '${e.model} | ${e.plate}',
                       leading: Icon(icon(e.typeVehicles!)),
                       actions: [
                         OneMiniButton(
-                          icon: LucideIcons.trash,
-                          color: OneColors.error,
+                          icon: LucideIcons.undo,
+                          color: OneColors.warning,
                           onPressed: () {
-                            onDelete(e.id!);
+                            returnVehicle(e);
                           },
                         ),
                       ],
@@ -186,7 +192,6 @@ class _ReportsPageState extends State<ReportsPage> {
                     );
                   }).toList(),
                 ),
-                OneSize.height64,
               ],
             ),
           );

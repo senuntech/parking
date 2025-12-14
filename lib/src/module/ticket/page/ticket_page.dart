@@ -63,7 +63,7 @@ class _TicketPageState extends State<TicketPage> {
       orderTicketModel.typeVehicles = typeVehicles;
     });
     categoryModel = context.read<CategoryController>().categories.firstWhere(
-      (element) => element.id == valueType,
+      (element) => element.id == value,
     );
     setValue(valueType);
   }

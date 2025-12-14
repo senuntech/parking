@@ -11,6 +11,7 @@ class OrderTicketModel {
   DateTime? exitAt;
   String? code;
   double? price;
+  int? paymentMethod;
 
   OrderTicketModel({
     this.id,
@@ -25,6 +26,7 @@ class OrderTicketModel {
     this.exitAt,
     this.code,
     this.price,
+    this.paymentMethod,
   });
 
   factory OrderTicketModel.fromMap(Map<String, dynamic> map) {
@@ -45,6 +47,7 @@ class OrderTicketModel {
           : null,
       code: map['code'],
       price: map['price'],
+      paymentMethod: map['payment_method'],
     );
   }
 
@@ -62,6 +65,7 @@ class OrderTicketModel {
       'exit_at': exitAt?.millisecondsSinceEpoch,
       'code': code,
       'price': price,
+      'payment_method': paymentMethod,
     };
   }
 
@@ -79,6 +83,7 @@ class OrderTicketModel {
     String? document,
     String? code,
     double? price,
+    int? paymentMethod,
   }) {
     return OrderTicketModel(
       id: id ?? this.id,
@@ -93,6 +98,7 @@ class OrderTicketModel {
       exitAt: exitAt ?? this.exitAt,
       code: code ?? this.code,
       price: price ?? this.price,
+      paymentMethod: paymentMethod ?? this.paymentMethod,
     );
   }
 }

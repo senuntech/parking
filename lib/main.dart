@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:one_ds/one_ds.dart';
 import 'package:parking/core/database/app_database.dart';
+import 'package:parking/src/module/cash_register/page/cash_register_page.dart';
 import 'package:parking/src/module/category/controller/category_controller.dart';
 import 'package:parking/src/module/category/page/category_page.dart';
 import 'package:parking/src/module/home/controller/home_controller.dart';
@@ -59,6 +60,7 @@ class MyApp extends StatelessWidget {
           Routes.settings: (context) => SettingsPage(),
           Routes.category: (context) => CategoryPage(),
           Routes.reports: (context) => ReportsPage(),
+          Routes.cashRegister: (context) => CashRegisterPage(),
           //Routes.printer: (context) => PrinterPage(),
         },
       ),
@@ -75,4 +77,5 @@ abstract class Routes {
   static String printer = '/printer';
   static String category = '/category';
   static String reports = '/reports';
+  static String cashRegister = '/cash_register';
 }

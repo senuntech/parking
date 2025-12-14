@@ -339,7 +339,7 @@ class _HomePageState extends State<HomePage> {
                         onPressed: () async {
                           final order = await context
                               .read<TicketController>()
-                              .exitTicket(id);
+                              .exitTicket(id, typeCharge);
                           Navigator.popAndPushNamed(
                             context,
                             Routes.receipt,
@@ -369,6 +369,14 @@ class _HomePageState extends State<HomePage> {
         onPressedMenu: () {
           keyScafold.currentState?.openDrawer();
         },
+        actions: [
+          OneMiniButton(
+            icon: LucideIcons.calculator,
+            onPressed: () {
+              Navigator.pushNamed(context, Routes.cashRegister);
+            },
+          ),
+        ],
       ),
       drawer: drawer,
       body: OneBody(

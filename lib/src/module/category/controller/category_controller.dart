@@ -14,6 +14,7 @@ class CategoryController extends ChangeNotifier {
       category.toJson(),
       where: 'id=${category.id}',
     );
+    getCategories();
     notifyListeners();
   }
 
