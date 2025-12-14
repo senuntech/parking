@@ -363,7 +363,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       key: keyScafold,
       appBar: OneAppBar(
-        title: 'PrintPark',
+        title: 'Home',
         context: context,
         subtitle: 'Lista de carros no pátio',
         onPressedMenu: () {

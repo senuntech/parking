@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: MaterialApp(
-        title: 'PrintPark',
+        title: 'Gestor Estacionamento',
         theme: ThemeData(
           useMaterial3: false,
           primarySwatch: generateMaterialColor(color: const Color(0xff273D4A)),
