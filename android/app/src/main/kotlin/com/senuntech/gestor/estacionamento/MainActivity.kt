@@ -1,4 +1,4 @@
-package com.senuntech.parking.parking
+package com.senuntech.gestor.estacionamento
 
 import io.flutter.embedding.android.FlutterActivity
 

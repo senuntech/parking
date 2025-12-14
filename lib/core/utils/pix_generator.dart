@@ -3,7 +3,7 @@ import 'dart:convert';
 String gerarQrCodePix({
   required String chave,
   required double valor,
-  String nomeRecebedor = "PRINT PARKING",
+  String nomeRecebedor = "Gestor Estacionamento",
   String cidadeRecebedor = "BRASIL",
 }) {
   // Função TLV
