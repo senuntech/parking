@@ -202,8 +202,8 @@ class _TicketPageState extends State<TicketPage> {
                       TelefoneInputFormatter(),
                     ],
                   ),
-                  OneInput(
-                    label: 'Segurança',
+                  /* OneInput(
+                    label: 'CPF',
                     icon: LucideIcons.shieldCheck,
                     hintText: 'CPF do Responsável',
                     validator: validatorRequired,
@@ -216,7 +216,7 @@ class _TicketPageState extends State<TicketPage> {
                       FilteringTextInputFormatter.digitsOnly,
                       CpfInputFormatter(),
                     ],
-                  ),
+                  ), */
                 ],
               ),
 

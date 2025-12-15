@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:one_ds/core/index.dart';
 import 'package:one_ds/one_ds.dart';
 import 'package:parking/core/enum/type_pix_enum.dart';
+import 'package:parking/core/extension/string_extension.dart';
 import 'package:parking/core/utils/validator.dart';
 import 'package:parking/src/module/settings/controller/settings_controller.dart';
 import 'package:parking/src/module/settings/widget/select_pix.dart';
@@ -61,6 +62,7 @@ class _SettingsPageState extends State<SettingsPage> {
     if (settingsController.settingsModel.image_path != null) {
       image = File(settingsController.settingsModel.image_path!);
     }
+    myPixController.text = settingsController.settingsModel.my_pix.orEmpty;
 
     scrollController.addListener(() {
       final noFinal =
@@ -236,8 +238,8 @@ class _SettingsPageState extends State<SettingsPage> {
                       label: 'PIX',
                       hintText: 'Digite seu Pix',
                       icon: LucideIcons.circleDollarSign,
+                      controller: myPixController,
                       validator: validatorRequired,
-                      initialValue: settingsController.settingsModel.my_pix,
                       onSaved: (value) =>
                           settingsController.settingsModel.my_pix = value,
                       inputFormatters: formatted,

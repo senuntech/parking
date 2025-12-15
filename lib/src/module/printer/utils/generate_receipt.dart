@@ -4,7 +4,6 @@ import 'package:esc_pos_utils_plus/esc_pos_utils_plus.dart';
 import 'package:image/image.dart' show decodeImage;
 import 'package:image_halftone/image_halftone.dart';
 import 'package:one_ds/one_ds.dart';
-import 'package:parking/core/extension/date_timer.dart';
 import 'package:parking/core/extension/string_extension.dart';
 import 'package:parking/core/utils/get_pix.dart' show getPix;
 import 'package:parking/src/module/settings/model/settings_model.dart';
@@ -88,7 +87,7 @@ Future<List<int>> printerReceipit(
         .split('')
         .map((e) => int.parse(e))
         .toList();
-    bytes += generator.barcode(Barcode.code39(barData));
+    bytes += generator.barcode(Barcode.code128(barData));
   }
   if (order.exitAt != null) {
     bytes += generator.text(

@@ -5,11 +5,14 @@ import 'package:one_ds/one_ds.dart';
 import 'package:parking/core/enum/payment_method_enum.dart';
 import 'package:parking/core/extension/date_timer.dart';
 import 'package:parking/main.dart';
+import 'package:parking/src/module/printer/utils/report_print.dart';
 import 'package:parking/src/module/reports/presenters/controller/reports_controller.dart';
+import 'package:parking/src/module/settings/controller/settings_controller.dart';
 import 'package:parking/src/module/ticket/controller/ticket_controller.dart';
 import 'package:parking/src/module/ticket/model/order_ticket_model.dart';
 import 'package:parking/src/utils/get_date.dart';
 import 'package:parking/src/utils/get_type_icon.dart';
+import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 import 'package:provider/provider.dart';
 
 class CashRegisterPage extends StatefulWidget {
@@ -88,6 +91,20 @@ class _CashRegisterPageState extends State<CashRegisterPage> {
     );
   }
 
+  Future<void> printReport() async {
+    final settings = context.read<SettingsController>().settingsModel;
+    final data = await printerReport(
+      settings: settings,
+      total: reportsController.getTotal,
+      pix: reportsController.getTotalByType(PaymentMethodEnum.pix.id),
+      cash: reportsController.getTotalByType(PaymentMethodEnum.cash.id),
+      card: reportsController.getTotalByType(PaymentMethodEnum.card.id),
+      first: first,
+      last: last,
+    );
+    await PrintBluetoothThermal.writeBytes(data);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,7 +130,7 @@ class _CashRegisterPageState extends State<CashRegisterPage> {
           OneMiniButton(
             icon: LucideIcons.printer,
             color: OneColors.success,
-            onPressed: () {},
+            onPressed: () => printReport(),
           ),
         ],
       ),
