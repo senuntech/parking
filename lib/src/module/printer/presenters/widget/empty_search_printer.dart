@@ -26,11 +26,12 @@ class EmptySearchPrinter extends StatelessWidget {
             textAlign: .center,
             style: TextStyle(color: Colors.grey),
           ),
+          OneSize.height16,
           OneButton(
             onPressed: () async {
               await AppSettings.openAppSettings(type: .bluetooth);
             },
-            label: 'Configurações de Bluetooth',
+            label: 'Configurações do Bluetooth',
           ),
         ],
         OneSize.height16,
