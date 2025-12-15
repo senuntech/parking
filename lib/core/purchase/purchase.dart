@@ -32,7 +32,7 @@ class PurchaseApp with ChangeNotifier {
   PurchaseDetails? _activePurchase;
 
   // --- Constantes ---
-  static const String productId = 'driver_control';
+  static const String productId = 'gestor_estacionamento';
 
   // --- Getters Públicos ---
   bool get isAvailable => _isAvailable;

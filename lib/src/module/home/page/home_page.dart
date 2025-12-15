@@ -57,7 +57,9 @@ class _HomePageState extends State<HomePage> {
               OneListTile(
                 title: 'Planos Premium',
                 leading: Icon(LucideIcons.crown),
-                onTap: () {},
+                onTap: () {
+                  Navigator.popAndPushNamed(context, Routes.plans);
+                },
                 showDivider: false,
               ),
               OneListTile(
