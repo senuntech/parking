@@ -121,7 +121,7 @@ class PremiumPricingCard extends StatelessWidget {
                     _buildFeatureItem('Sem Anúncios'),
                     _buildFeatureItem('Sem publicidades impressas'),
                     _buildFeatureItem('Relatórios Ilimitados'),
-                    _buildFeatureItem('Modelos Ilimitados'),
+                    _buildFeatureItem('Carros Ilimitados'),
                   ],
                 ),
               ),

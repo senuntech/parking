@@ -104,7 +104,7 @@ class ReceiptWidget extends StatelessWidget {
                 OneSize.height4,
                 Center(
                   child: BarcodeWidget(
-                    barcode: Barcode.codabar(),
+                    barcode: Barcode.code128(),
                     data: orderTicketModel!.code!,
                     width: 200,
                     height: 100,

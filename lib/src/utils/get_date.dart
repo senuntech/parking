@@ -10,6 +10,8 @@ Future<void> showDatePickerApp(
   DateTime first,
   DateTime last,
 ) async {
+  DateTime? firstTemp;
+  DateTime? lastTemp;
   OneBottomSheet.show(
     context: context,
     title: 'Selecionar Data',
@@ -20,8 +22,9 @@ Future<void> showDatePickerApp(
           selectedDayHighlightColor: OneColors.primary,
         ),
         value: [first, last],
-        onValueChanged: (dates) {
-          onSelected(dates.first, dates.last);
+        onValueChanged: (dates) async {
+          firstTemp = dates.first;
+          lastTemp = dates.last;
         },
       ),
       OneDivider(),
@@ -32,7 +35,12 @@ Future<void> showDatePickerApp(
           child: OneButton(
             onPressed: () async {
               Navigator.pop(context);
-              await reportsController.getOrderByDate(first, last);
+              if (firstTemp == null || lastTemp == null) {
+                return;
+              }
+
+              onSelected(firstTemp!, lastTemp!);
+              await reportsController.getOrderByDate(firstTemp!, lastTemp!);
             },
             label: 'Selecionar',
             style: OneButtonStyle.primary,

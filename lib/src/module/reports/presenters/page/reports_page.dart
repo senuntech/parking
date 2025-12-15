@@ -7,6 +7,7 @@ import 'package:parking/main.dart';
 import 'package:parking/src/module/reports/presenters/controller/reports_controller.dart';
 import 'package:parking/src/module/reports/presenters/view/view_reports.dart';
 import 'package:parking/src/module/reports/presenters/widget/chart_widget.dart';
+import 'package:parking/src/utils/get_date.dart';
 import 'package:parking/src/utils/get_type_icon.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +23,7 @@ class _ReportsPageState extends State<ReportsPage> {
   DateTime first = DateTime.now();
   DateTime last = DateTime.now();
 
-  Future<void> showDatePicker() async {
+  /*   Future<void> showDatePicker() async {
     OneBottomSheet.show(
       context: context,
       title: 'Selecionar Data',
@@ -57,7 +58,7 @@ class _ReportsPageState extends State<ReportsPage> {
       ],
     );
   }
-
+ */
   @override
   void initState() {
     reportsController = context.read<ReportsController>();
@@ -92,7 +93,19 @@ class _ReportsPageState extends State<ReportsPage> {
         actions: [
           OneMiniButton(
             icon: LucideIcons.calendarDays,
-            onPressed: showDatePicker,
+            onPressed: () {
+              showDatePickerApp(
+                context,
+                reportsController,
+                (first, last) {
+                  this.first = first;
+                  this.last = last;
+                  setState(() {});
+                },
+                first,
+                last,
+              );
+            },
           ),
           OneMiniButton(
             icon: LucideIcons.fileChartColumn,

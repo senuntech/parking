@@ -7,4 +7,5 @@ enum TypePixEnum {
   const TypePixEnum({required this.type, required this.errorMessage});
   final int type;
   final String errorMessage;
+  
 }

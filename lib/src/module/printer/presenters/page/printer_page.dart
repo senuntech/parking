@@ -50,7 +50,7 @@ class _PrinterPageState extends State<PrinterPage> {
     if (_progress && items.isEmpty) {
       return Padding(
         padding: .only(top: MediaQuery.of(context).size.height * .3),
-        child: const OneDotsLoader(),
+        child: const CircularProgressIndicator.adaptive(),
       );
     }
     if (items.isEmpty) {
@@ -60,6 +60,8 @@ class _PrinterPageState extends State<PrinterPage> {
       return ListView.builder(
         shrinkWrap: true,
         itemCount: items.length,
+        physics: NeverScrollableScrollPhysics(),
+        padding: .only(bottom: 100),
         itemBuilder: (context, index) {
           BluetoothInfo item = items.elementAt(index);
           return ItemPrinter(
@@ -113,17 +115,6 @@ class _PrinterPageState extends State<PrinterPage> {
   }
 
   ({Color? colors, Widget icon, String label}) get buttonState {
-    if (false) {
-      return (
-        colors: Colors.red,
-        icon: SizedBox.square(
-          dimension: 25,
-          child: CircularProgressIndicator(color: Colors.white),
-        ),
-        label: 'Parar de Buscar',
-      );
-    }
-
     return (
       colors: null,
       icon: Icon(LucideIcons.search),
