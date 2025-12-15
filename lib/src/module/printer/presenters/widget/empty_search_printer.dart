@@ -1,6 +1,6 @@
+import 'dart:io';
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
-import 'package:one_ds/core/index.dart';
-import 'package:one_ds/core/ui/index.dart';
 import 'package:one_ds/one_ds.dart';
 
 class EmptySearchPrinter extends StatelessWidget {
@@ -19,6 +19,21 @@ class EmptySearchPrinter extends StatelessWidget {
           color: Colors.grey,
           textAlign: .center,
         ),
+        OneSize.height16,
+        if (Platform.isAndroid) ...[
+          OneText(
+            '🚨 Caso não encontre a impressora, tente pareá-la nas configurações de Bluetooth do seu dispositivo.',
+            textAlign: .center,
+            style: TextStyle(color: Colors.grey),
+          ),
+          OneButton(
+            onPressed: () async {
+              await AppSettings.openAppSettings(type: .bluetooth);
+            },
+            label: 'Configurações de Bluetooth',
+          ),
+        ],
+        OneSize.height16,
       ],
     );
   }

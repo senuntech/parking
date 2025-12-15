@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:one_ds/one_ds.dart';
 import 'package:parking/src/module/printer/presenters/widget/empty_search_printer.dart';
@@ -23,18 +21,40 @@ class _PrinterPageState extends State<PrinterPage> {
   bool connected = false;
   List<BluetoothInfo> items = [];
   bool _progress = false;
-  final String _msj = "";
-
-  late StreamSubscription<bool> _isScanningSubscription;
 
   @override
   void initState() {
     super.initState();
+    requestPermission();
   }
 
   @override
   void dispose() {
     super.dispose();
+  }
+
+  Future<void> requestPermission() async {
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.bluetoothScan,
+      Permission.bluetoothConnect,
+    ].request();
+    if (statuses.values.every((status) => status.isGranted)) {
+      onScanPressed();
+    }
+  }
+
+  Future<void> printConnected() async {
+    try {
+      await PrintBluetoothThermal.writeString(
+        printText: PrintTextSize(size: 1, text: 'Impressora Conectada'),
+      );
+      ShowSnakBar.show(context, message: 'Impressão Conectada', type: .success);
+      setState(() {});
+    } catch (e) {
+      ShowSnakBar.show(context, message: 'Erro ao conectar', type: .error);
+      deviceMacAddress = '';
+      setState(() {});
+    }
   }
 
   Widget get getBody {
@@ -71,6 +91,7 @@ class _PrinterPageState extends State<PrinterPage> {
               await PrintBluetoothThermal.connect(
                 macPrinterAddress: item.macAdress,
               );
+              await printConnected();
             },
             title: item.name,
             subTitle: Platform.isAndroid ? item.macAdress : 'Impressora',

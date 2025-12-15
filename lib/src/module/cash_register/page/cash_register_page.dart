@@ -5,6 +5,7 @@ import 'package:one_ds/one_ds.dart';
 import 'package:parking/core/enum/payment_method_enum.dart';
 import 'package:parking/core/extension/date_timer.dart';
 import 'package:parking/main.dart';
+import 'package:parking/src/module/printer/presenters/page/printer_page.dart';
 import 'package:parking/src/module/printer/utils/report_print.dart';
 import 'package:parking/src/module/reports/presenters/controller/reports_controller.dart';
 import 'package:parking/src/module/settings/controller/settings_controller.dart';
@@ -56,6 +57,15 @@ class _CashRegisterPageState extends State<CashRegisterPage> {
   }
 
   Future<void> printReport() async {
+    if (deviceMacAddress.isEmpty) {
+      ShowSnakBar.show(
+        context,
+        message: 'Impressora não encontrada',
+        type: .warning,
+      );
+      return;
+    }
+
     final settings = context.read<SettingsController>().settingsModel;
     final data = await printerReport(
       settings: settings,

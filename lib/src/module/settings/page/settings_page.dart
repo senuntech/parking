@@ -109,9 +109,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   void onChanged(int? value) async {
     if (value != settingsController.settingsModel.type_pix) {
-      formKey.currentState?.reset();
       myPixController.clear();
-
       settingsController.settingsModel.type_pix = null;
       focusNode.unfocus();
     }

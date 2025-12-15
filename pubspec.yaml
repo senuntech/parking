@@ -38,6 +38,7 @@ dependencies:
   mobile_scanner: ^7.1.4
   barcode_widget: ^2.0.4
   lottie: ^3.3.2
+  app_settings: ^7.0.0
 
 dev_dependencies:
   flutter_test:

@@ -141,21 +141,22 @@ class _HomePageState extends State<HomePage> {
             },
           ),
         ),
-        Padding(
-          padding: .symmetric(horizontal: 16.0),
-          child: OneListTile(
-            title: 'EULA',
-            leading: Icon(LucideIcons.book),
+        if (Platform.isIOS)
+          Padding(
+            padding: .symmetric(horizontal: 16.0),
+            child: OneListTile(
+              title: 'EULA',
+              leading: Icon(LucideIcons.book),
 
-            children: [OneText('Termos de uso (EULA)')],
-            onTap: () {
-              LaunchApp.site(
-                "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/",
-              );
-              Navigator.pop(context);
-            },
+              children: [OneText('Termos de uso (EULA)')],
+              onTap: () {
+                LaunchApp.site(
+                  "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/",
+                );
+                Navigator.pop(context);
+              },
+            ),
           ),
-        ),
       ],
     );
   }
