@@ -26,6 +26,9 @@ class _SettingsPageState extends State<SettingsPage> {
   bool showButton = false;
   late SettingsController settingsController;
   final formKey = GlobalKey<FormState>();
+  final focusNode = FocusNode();
+  final myPixController = TextEditingController();
+  TextInputType typeBoard = TextInputType.emailAddress;
 
   void getImage() async {
     final ImagePicker picker = ImagePicker();
@@ -100,6 +103,34 @@ class _SettingsPageState extends State<SettingsPage> {
     }
 
     return list;
+  }
+
+  void onChanged(int? value) async {
+    if (value != settingsController.settingsModel.type_pix) {
+      formKey.currentState?.reset();
+      myPixController.clear();
+
+      settingsController.settingsModel.type_pix = null;
+      focusNode.unfocus();
+    }
+
+    setState(() {
+      settingsController.settingsModel.type_pix = value;
+      typeBoard = getTypeKeyBoard;
+    });
+    await Future.delayed(Duration(milliseconds: 100), () {
+      focusNode.requestFocus();
+    });
+  }
+
+  TextInputType get getTypeKeyBoard {
+    int? currentType = settingsController.settingsModel.type_pix;
+    switch (currentType) {
+      case 1:
+        return TextInputType.emailAddress;
+      default:
+        return TextInputType.number;
+    }
   }
 
   @override
@@ -200,7 +231,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     },
                   ),
                   if (showPix) ...[
-                    SelectPix(),
+                    SelectPix(onChanged: onChanged),
                     OneInput(
                       label: 'PIX',
                       hintText: 'Digite seu Pix',
@@ -210,6 +241,8 @@ class _SettingsPageState extends State<SettingsPage> {
                       onSaved: (value) =>
                           settingsController.settingsModel.my_pix = value,
                       inputFormatters: formatted,
+                      focusNode: focusNode,
+                      keyboardType: typeBoard,
                     ),
                   ],
                 ],

@@ -4,7 +4,8 @@ import 'package:parking/src/module/settings/controller/settings_controller.dart'
 import 'package:provider/provider.dart';
 
 class SelectPix extends StatefulWidget {
-  const SelectPix({super.key});
+  SelectPix({super.key, this.onChanged});
+  Function(int? value)? onChanged;
 
   @override
   State<SelectPix> createState() => _SelectPixState();
@@ -22,6 +23,7 @@ class _SelectPixState extends State<SelectPix> {
           setState(() {
             value.typePix = type;
           });
+          widget.onChanged?.call(type);
         }
 
         return Column(

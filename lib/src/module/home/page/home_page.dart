@@ -36,7 +36,19 @@ class _HomePageState extends State<HomePage> {
         children: [
           DrawerHeader(
             decoration: BoxDecoration(color: OneColors.background),
-            child: Center(child: OneSelectImage()),
+            child: Center(
+              child: Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image: AssetImage('assets/icon/icon.png'),
+                    fit: BoxFit.scaleDown,
+                  ),
+                ),
+              ),
+            ),
           ),
           OneSize.height16,
           Column(
