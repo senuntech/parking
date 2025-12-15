@@ -135,7 +135,7 @@ class _HomePageState extends State<HomePage> {
             children: [OneText('Politica de privacidade')],
             onTap: () {
               LaunchApp.site(
-                "https://senuntech.com.br/politicas/gestor_transportes.html",
+                "https://senuntech.com.br/politicas/gestor_estacionamentos.html",
               );
               Navigator.pop(context);
             },
