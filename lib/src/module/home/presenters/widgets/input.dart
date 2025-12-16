@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:one_ds/one_ds.dart';
-import 'package:parking/src/module/home/widgets/show_scan.dart';
-import 'package:parking/src/module/ticket/controller/ticket_controller.dart';
+import 'package:parking/src/module/home/presenters/widgets/show_scan.dart';
+import 'package:parking/src/module/ticket/presenters/controller/ticket_controller.dart';
 import 'package:provider/provider.dart';
 
 final controller = TextEditingController();

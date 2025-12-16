@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:parking/src/module/category/model/category_model.dart';
+import 'package:parking/src/module/category/data/model/category_model.dart';
 import 'package:sqlbrite/sqlbrite.dart';
 
 class CategoryController extends ChangeNotifier {

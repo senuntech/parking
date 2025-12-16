@@ -9,11 +9,11 @@ import 'package:parking/core/enum/type_charge_enum.dart';
 import 'package:parking/core/enum/vehicle_enum.dart';
 import 'package:parking/core/utils/launch.dart';
 import 'package:parking/main.dart';
-import 'package:parking/src/module/category/controller/category_controller.dart';
-import 'package:parking/src/module/home/widgets/empty_page.dart';
-import 'package:parking/src/module/home/widgets/input.dart';
-import 'package:parking/src/module/ticket/controller/ticket_controller.dart';
-import 'package:parking/src/module/ticket/model/order_ticket_model.dart';
+import 'package:parking/src/module/category/presenters/controller/category_controller.dart';
+import 'package:parking/src/module/home/presenters/widgets/empty_page.dart';
+import 'package:parking/src/module/home/presenters/widgets/input.dart';
+import 'package:parking/src/module/ticket/presenters/controller/ticket_controller.dart';
+import 'package:parking/src/module/ticket/data/model/order_ticket_model.dart';
 import 'package:parking/src/widgets/vehicle_widget.dart';
 import 'package:provider/provider.dart';
 

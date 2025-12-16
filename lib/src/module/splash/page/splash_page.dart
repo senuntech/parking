@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:one_ds/core/components/index.dart';
 import 'package:parking/core/purchase/purchase.dart';
 import 'package:parking/main.dart';
-import 'package:parking/src/module/category/controller/category_controller.dart';
-import 'package:parking/src/module/settings/controller/settings_controller.dart';
-import 'package:parking/src/module/ticket/controller/ticket_controller.dart';
+import 'package:parking/src/module/category/presenters/controller/category_controller.dart';
+import 'package:parking/src/module/settings/presenters/controller/settings_controller.dart';
+import 'package:parking/src/module/ticket/presenters/controller/ticket_controller.dart';
 import 'package:provider/provider.dart';
 
 class SplashPage extends StatefulWidget {

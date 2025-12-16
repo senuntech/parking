@@ -5,8 +5,8 @@ import 'package:one_ds/core/ui/organisms/one_body.dart';
 import 'package:one_ds/one_ds.dart';
 import 'package:parking/core/enum/vehicle_enum.dart';
 import 'package:parking/core/utils/validator.dart';
-import 'package:parking/src/module/category/controller/category_controller.dart';
-import 'package:parking/src/module/category/model/category_model.dart';
+import 'package:parking/src/module/category/presenters/controller/category_controller.dart';
+import 'package:parking/src/module/category/data/model/category_model.dart';
 import 'package:provider/provider.dart';
 
 class CategoryAddView extends StatefulWidget {

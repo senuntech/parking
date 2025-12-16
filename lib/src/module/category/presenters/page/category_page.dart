@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:one_ds/one_ds.dart';
 import 'package:parking/core/enum/vehicle_enum.dart';
-import 'package:parking/src/module/category/page/category_add_view.dart';
-import 'package:parking/src/module/category/widgets/item_category.dart';
+import 'package:parking/src/module/category/presenters/page/category_add_view.dart';
+import 'package:parking/src/module/category/presenters/widgets/item_category.dart';
 
 class CategoryPage extends StatefulWidget {
   const CategoryPage({super.key});

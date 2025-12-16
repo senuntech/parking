@@ -1,7 +1,7 @@
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:parking/core/enum/vehicle_enum.dart';
 import 'package:parking/core/extension/date_timer.dart';
-import 'package:parking/src/module/ticket/model/order_ticket_model.dart';
+import 'package:parking/src/module/ticket/data/model/order_ticket_model.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 

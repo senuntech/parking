@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:one_ds/core/ui/index.dart';
-import 'package:parking/src/module/settings/controller/settings_controller.dart';
+import 'package:parking/src/module/settings/presenters/controller/settings_controller.dart';
 import 'package:provider/provider.dart';
 
 class SelectPix extends StatefulWidget {

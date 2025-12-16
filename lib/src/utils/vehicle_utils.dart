@@ -1,7 +1,7 @@
 import 'package:parking/core/enum/type_charge_enum.dart';
 import 'package:parking/core/enum/vehicle_enum.dart';
 import 'package:parking/core/extension/date_timer.dart';
-import 'package:parking/src/module/ticket/model/order_ticket_model.dart';
+import 'package:parking/src/module/ticket/data/model/order_ticket_model.dart';
 
 VehicleEnum getVehicle(int typeVehicle) {
   if (typeVehicle == VehicleEnum.car.id) {

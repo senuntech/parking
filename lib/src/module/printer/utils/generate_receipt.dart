@@ -6,8 +6,8 @@ import 'package:image_halftone/image_halftone.dart';
 import 'package:one_ds/one_ds.dart';
 import 'package:parking/core/extension/string_extension.dart';
 import 'package:parking/core/utils/get_pix.dart' show getPix;
-import 'package:parking/src/module/settings/model/settings_model.dart';
-import 'package:parking/src/module/ticket/model/order_ticket_model.dart';
+import 'package:parking/src/module/settings/data/model/settings_model.dart';
+import 'package:parking/src/module/ticket/data/model/order_ticket_model.dart';
 import 'package:parking/src/utils/vehicle_utils.dart';
 
 Future<List<int>> printerReceipit(
