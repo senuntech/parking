@@ -91,7 +91,7 @@ class _HomePageState extends State<HomePage> {
                 title: 'Dúvidas ou Sugestões',
                 leading: Icon(LucideIcons.mail),
                 onTap: () {
-                  LaunchApp.email();
+                  LaunchApp.email(subjectTitle: 'Gestor Estacionamento');
                   Navigator.pop(context);
                 },
                 showDivider: false,

@@ -46,9 +46,9 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Need BLE permission</string>
+	<string>Este aplicativo utiliza o Bluetooth para se conectar a impressoras e permitir a impressão de recibos e comprovantes.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>Need BLE permission</string>
+	<string>Este aplicativo utiliza o Bluetooth para se conectar a impressoras e permitir a impressão de recibos e comprovantes.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>bluetooth-central</string>

@@ -1,12 +1,12 @@
 import 'package:url_launcher/url_launcher.dart';
 
 class LaunchApp {
-  static void email() {
+  static void email({required String subjectTitle}) {
     final Uri emailLaunchUri = Uri(
       scheme: 'mailto',
       path: 'senuntec@gmail.com',
       query: encodeQueryParameters(<String, String>{
-        'subject': 'Recibo e Gestão para Motorista - Dúvidas ou Sugestões',
+        'subject': '$subjectTitle - Dúvidas ou Sugestões',
       }),
     );
 
