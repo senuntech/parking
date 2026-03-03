@@ -4,8 +4,6 @@ import 'package:esc_pos_utils_plus/esc_pos_utils_plus.dart';
 import 'package:image/image.dart' show decodeImage;
 import 'package:image_halftone/image_halftone.dart';
 import 'package:one_ds/one_ds.dart';
-import 'package:parking/core/extension/date_timer.dart';
-import 'package:parking/core/extension/string_extension.dart';
 import 'package:parking/src/module/settings/data/model/settings_model.dart';
 
 Future<List<int>> printerReport({

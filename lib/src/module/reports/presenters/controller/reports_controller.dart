@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:parking/core/extension/date_timer.dart';
+import 'package:one_ds/core/extension/date_timer.dart';
 import 'package:parking/src/module/reports/presenters/widget/chart_widget.dart';
 import 'package:parking/src/module/ticket/data/model/order_ticket_model.dart';
 import 'package:sqlbrite/sqlbrite.dart';
@@ -47,7 +47,7 @@ class ReportsController extends ChangeNotifier {
         groupedSales[monthKey]!.vendas += saleValue;
       } else {
         groupedSales[monthKey] = VendaPorMes(
-          mes: element.createdAt!.currentNameMonthABBR,
+          mes: element.createdAt!.nameMonthABBR,
           vendas: saleValue,
           date: element.createdAt,
         );
@@ -94,9 +94,9 @@ class ReportsController extends ChangeNotifier {
 
     final List<Map<String, dynamic>> result = await briteDb.query(
       'order_ticket',
-      where: 'created_at BETWEEN ? AND ? AND exit_at IS NOT NULL',
+      where: 'exit_at BETWEEN ? AND ? AND exit_at IS NOT NULL',
       whereArgs: [start, end],
-      orderBy: 'created_at DESC',
+      orderBy: 'exit_at DESC',
     );
 
     return result.map((e) => OrderTicketModel.fromMap(e)).toList();

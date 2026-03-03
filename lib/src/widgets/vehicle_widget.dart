@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:one_ds/one_ds.dart';
 import 'package:parking/core/enum/type_charge_enum.dart';
 import 'package:parking/core/enum/vehicle_enum.dart';
-import 'package:parking/core/extension/date_timer.dart';
 
 import 'package:parking/src/widgets/timer_widget.dart';
 

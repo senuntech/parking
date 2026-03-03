@@ -1,9 +1,6 @@
-import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
-import 'package:one_ds/core/index.dart';
 import 'package:one_ds/one_ds.dart';
 import 'package:parking/core/enum/payment_method_enum.dart';
-import 'package:parking/core/extension/date_timer.dart';
 import 'package:parking/main.dart';
 import 'package:parking/src/module/printer/presenters/page/printer_page.dart';
 import 'package:parking/src/module/printer/utils/report_print.dart';

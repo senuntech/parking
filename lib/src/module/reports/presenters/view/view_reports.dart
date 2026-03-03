@@ -1,10 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-
 import 'package:one_ds/one_ds.dart';
-import 'package:parking/core/extension/date_timer.dart';
-import 'package:parking/core/extension/string_extension.dart';
 import 'package:parking/src/module/reports/presenters/controller/reports_controller.dart';
 import 'package:parking/src/module/reports/utils/get_pdf.dart';
 import 'package:parking/src/module/settings/presenters/controller/settings_controller.dart';
