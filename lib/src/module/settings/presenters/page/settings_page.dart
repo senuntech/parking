@@ -7,8 +7,8 @@ import 'package:one_ds/one_ds.dart';
 import 'package:parking/core/enum/type_pix_enum.dart';
 import 'package:parking/core/extension/string_extension.dart';
 import 'package:parking/core/utils/validator.dart';
-import 'package:parking/src/module/settings/controller/settings_controller.dart';
-import 'package:parking/src/module/settings/widget/select_pix.dart';
+import 'package:parking/src/module/settings/presenters/controller/settings_controller.dart';
+import 'package:parking/src/module/settings/presenters/widget/select_pix.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 

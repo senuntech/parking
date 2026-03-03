@@ -6,7 +6,7 @@ import 'package:image_halftone/image_halftone.dart';
 import 'package:one_ds/one_ds.dart';
 import 'package:parking/core/extension/date_timer.dart';
 import 'package:parking/core/extension/string_extension.dart';
-import 'package:parking/src/module/settings/model/settings_model.dart';
+import 'package:parking/src/module/settings/data/model/settings_model.dart';
 
 Future<List<int>> printerReport({
   required SettingsModel settings,

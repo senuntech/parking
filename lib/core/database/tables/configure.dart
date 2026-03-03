@@ -1,5 +1,5 @@
 import 'package:parking/core/enum/vehicle_enum.dart';
-import 'package:parking/src/module/category/model/category_model.dart';
+import 'package:parking/src/module/category/data/model/category_model.dart';
 import 'package:sqlbrite/sqlbrite.dart';
 
 Future<void> populateInitialData(final Database db) async {
