@@ -42,7 +42,7 @@ class _TimerWidgetState extends State<TimerWidget> {
   }
 
   String get getDay {
-    final now = DateTime.now().difference(widget.timer).inDays;
+    final now = DateTime.now().difference(widget.timer).inDays + 1;
     if (now > 1) {
       return '$now Dias';
     }

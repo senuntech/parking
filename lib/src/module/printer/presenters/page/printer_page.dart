@@ -48,10 +48,10 @@ class _PrinterPageState extends State<PrinterPage> {
       await PrintBluetoothThermal.writeString(
         printText: PrintTextSize(size: 1, text: 'Impressora Conectada'),
       );
-      ShowSnakBar.show(context, message: 'Impressão Conectada', type: .success);
+      OneSnakBar.show(context, message: 'Impressão Conectada', type: .success);
       setState(() {});
     } catch (e) {
-      ShowSnakBar.show(context, message: 'Erro ao conectar', type: .error);
+      OneSnakBar.show(context, message: 'Erro ao conectar', type: .error);
       deviceMacAddress = '';
       setState(() {});
     }

@@ -19,9 +19,9 @@ class ReceiptWidget extends StatelessWidget {
   final bool isExist;
   final OrderTicketModel? orderTicketModel;
 
-  File? getImage(SettingsModel settingsModel) {
+  Image? getImage(SettingsModel settingsModel) {
     if (settingsModel.image_path != null) {
-      return File(settingsModel.image_path!);
+      return Image.file(File(settingsModel.image_path!));
     }
     return null;
   }
@@ -86,7 +86,7 @@ class ReceiptWidget extends StatelessWidget {
                 Center(
                   child: QrImageView(
                     data: getPix(
-                      type: 1,
+                      type: controller.settingsModel.type_pix!,
                       pix: controller.settingsModel.my_pix!,
                       value: getTotal(orderTicketModel!),
                     ),

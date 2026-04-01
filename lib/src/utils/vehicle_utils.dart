@@ -21,7 +21,7 @@ String getDate(OrderTicketModel orderTicketModel) {
 }
 
 int getDay(OrderTicketModel orderTicketModel) {
-  return DateTime.now().difference(orderTicketModel.createdAt!).inDays;
+  return DateTime.now().difference(orderTicketModel.createdAt!).inDays + 1;
 }
 
 int getMinutes(OrderTicketModel orderTicketModel) {

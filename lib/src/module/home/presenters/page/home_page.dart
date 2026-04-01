@@ -236,7 +236,7 @@ class _HomePageState extends State<HomePage> {
       labelNo: 'Não',
       onYes: () {
         context.read<TicketController>().deleteTicket(id);
-        ShowSnakBar.show(
+        OneSnakBar.show(
           context,
           message: 'Veículo deletado com sucesso',
           type: .success,

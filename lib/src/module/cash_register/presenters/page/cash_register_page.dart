@@ -55,7 +55,7 @@ class _CashRegisterPageState extends State<CashRegisterPage> {
 
   Future<void> printReport() async {
     if (deviceMacAddress.isEmpty) {
-      ShowSnakBar.show(
+      OneSnakBar.show(
         context,
         message: 'Impressora não encontrada',
         type: .warning,

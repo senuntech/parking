@@ -17,7 +17,7 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  File? image;
+  Image? image;
   final ScrollController scrollController = ScrollController();
   final GlobalKey keyScrollPix = GlobalKey();
   bool showPix = false;
@@ -39,7 +39,7 @@ class _SettingsPageState extends State<SettingsPage> {
       final path = await saveImageInternally(File(image.path));
       settingsController.settingsModel.image_path = path;
       setState(() {
-        this.image = File(image.path);
+        this.image = Image.asset(image.path);
       });
     }
   }
@@ -57,7 +57,7 @@ class _SettingsPageState extends State<SettingsPage> {
     settingsController = context.read<SettingsController>();
     showPix = settingsController.settingsModel.show_pix ?? false;
     if (settingsController.settingsModel.image_path != null) {
-      image = File(settingsController.settingsModel.image_path!);
+      image = Image.asset(settingsController.settingsModel.image_path!);
     }
     myPixController.text = settingsController.settingsModel.my_pix.orEmpty;
 
