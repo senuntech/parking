@@ -10,6 +10,7 @@ import 'package:parking/src/module/ticket/presenters/controller/ticket_controlle
 import 'package:parking/src/module/ticket/data/model/order_ticket_model.dart';
 import 'package:parking/src/utils/get_date.dart';
 import 'package:parking/src/utils/get_type_icon.dart';
+import 'package:parking/src/utils/vehicle_utils.dart';
 import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 import 'package:provider/provider.dart';
 
@@ -164,6 +165,7 @@ class _CashRegisterPageState extends State<CashRegisterPage> {
                 OneCard(
                   title: "Histórico",
                   children: value.listOrder.map((e) {
+                    double total = getTotalPrice(e);
                     return OneListTile(
                       title: '${e.model} | ${e.plate}',
                       leading: Icon(icon(e.typeVehicles!)),
@@ -178,7 +180,7 @@ class _CashRegisterPageState extends State<CashRegisterPage> {
                       ],
                       children: [
                         OneText.caption(
-                          '${e.createdAt?.formated} - ${UtilBrasilFields.obterReal(e.price ?? 0)}',
+                          '${e.createdAt?.formated} - ${UtilBrasilFields.obterReal(total)}',
                         ),
                       ],
                       onTap: () {

@@ -21,14 +21,16 @@ String getDate(OrderTicketModel orderTicketModel) {
 }
 
 int getDay(OrderTicketModel orderTicketModel) {
-  return DateTime.now().difference(orderTicketModel.createdAt!).inDays + 1;
+  DateTime exit = orderTicketModel.exitAt ?? DateTime.now();
+  return exit.difference(orderTicketModel.createdAt!).inDays + 1;
 }
 
 int getMinutes(OrderTicketModel orderTicketModel) {
-  return DateTime.now().difference(orderTicketModel.createdAt!).inMinutes;
+  DateTime exit = orderTicketModel.exitAt ?? DateTime.now();
+  return exit.difference(orderTicketModel.createdAt!).inMinutes;
 }
 
-double getTotal(OrderTicketModel orderTicketModel) {
+double getTotalPrice(OrderTicketModel orderTicketModel) {
   double price = orderTicketModel.price!;
   if (orderTicketModel.valueType == TypeChargeEnum.fix.type) {
     return price;
@@ -37,5 +39,7 @@ double getTotal(OrderTicketModel orderTicketModel) {
     return price * getDay(orderTicketModel);
   }
   double value = price / 60;
-  return value * getMinutes(orderTicketModel);
+  int minutes = getMinutes(orderTicketModel);
+
+  return (value * minutes).ceilToDouble();
 }

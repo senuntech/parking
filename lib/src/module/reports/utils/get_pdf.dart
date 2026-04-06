@@ -2,6 +2,7 @@ import 'package:one_ds/core/extension/date_timer.dart';
 import 'package:one_ds/one_ds.dart';
 import 'package:parking/core/enum/vehicle_enum.dart';
 import 'package:parking/src/module/ticket/data/model/order_ticket_model.dart';
+import 'package:parking/src/utils/vehicle_utils.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
@@ -36,7 +37,7 @@ pw.Table tableReports(List<OrderTicketModel> listOrder) {
         e.createdAt?.formated,
         e.exitAt?.formated,
         typeVehicle(e),
-        UtilBrasilFields.obterReal(e.price!),
+        UtilBrasilFields.obterReal(getTotalPrice(e)),
       ];
     }).toList(),
     headerStyle: pw.TextStyle(

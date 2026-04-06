@@ -21,9 +21,7 @@ Future<List<int>> printerReport({
 
   if (settings.image_path != null) {
     final img = File(settings.image_path!);
-    final imageFilter = await convertImageToHalftoneBlackAndWhite(
-      img.readAsBytesSync(),
-    );
+    final imageFilter = await convertImageToHalftoneBlackAndWhite(img);
     final imgs = decodeImage(imageFilter!);
     bytes += generator.imageRaster(imgs!, imageFn: PosImageFn.bitImageRaster);
   }

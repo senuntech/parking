@@ -19,9 +19,7 @@ Future<List<int>> printerReceipit(
 
   if (settings.image_path != null) {
     final img = File(settings.image_path!);
-    final imageFilter = await convertImageToHalftoneBlackAndWhite(
-      img.readAsBytesSync(),
-    );
+    final imageFilter = await convertImageToHalftoneBlackAndWhite(img);
     final imgs = decodeImage(imageFilter!);
     bytes += generator.imageRaster(imgs!, imageFn: PosImageFn.bitImageRaster);
   }
@@ -91,7 +89,7 @@ Future<List<int>> printerReceipit(
   }
   if (order.exitAt != null) {
     bytes += generator.text(
-      UtilBrasilFields.obterReal(getTotal(order)),
+      UtilBrasilFields.obterReal(getTotalPrice(order)),
       styles: PosStyles(align: .center, bold: true, fontType: .fontA),
     );
   }

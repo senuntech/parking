@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:one_ds/core/extension/date_timer.dart';
 import 'package:parking/src/module/reports/presenters/widget/chart_widget.dart';
 import 'package:parking/src/module/ticket/data/model/order_ticket_model.dart';
+import 'package:parking/src/utils/vehicle_utils.dart';
 import 'package:sqlbrite/sqlbrite.dart';
 
 class ReportsController extends ChangeNotifier {
@@ -71,7 +72,7 @@ class ReportsController extends ChangeNotifier {
 
   double get getTotal {
     return listOrder.fold(0, (previousValue, element) {
-      double price = element.price ?? 0;
+      double price = getTotalPrice(element);
       return previousValue + price;
     });
   }
@@ -113,7 +114,8 @@ class ReportsController extends ChangeNotifier {
       previousValue,
       element,
     ) {
-      double price = element.price ?? 0;
+      //double price = element.price ?? 0;
+      double price = getTotalPrice(element);
       return previousValue + price;
     });
   }

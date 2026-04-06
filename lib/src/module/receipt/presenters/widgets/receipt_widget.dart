@@ -74,7 +74,7 @@ class ReceiptWidget extends StatelessWidget {
               ),
               if (orderTicketModel?.exitAt != null) ...[
                 OneText.heading2(
-                  'Total: ${UtilBrasilFields.obterReal(getTotal(orderTicketModel!))}',
+                  'Total: ${UtilBrasilFields.obterReal(getTotalPrice(orderTicketModel!))}',
                   textAlign: .center,
                 ),
               ],
@@ -88,7 +88,7 @@ class ReceiptWidget extends StatelessWidget {
                     data: getPix(
                       type: controller.settingsModel.type_pix!,
                       pix: controller.settingsModel.my_pix!,
-                      value: getTotal(orderTicketModel!),
+                      value: getTotalPrice(orderTicketModel!),
                     ),
                     version: QrVersions.auto,
                     size: 120,

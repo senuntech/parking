@@ -7,6 +7,7 @@ import 'package:parking/src/module/reports/presenters/view/view_reports.dart';
 import 'package:parking/src/module/reports/presenters/widget/chart_widget.dart';
 import 'package:parking/src/utils/get_date.dart';
 import 'package:parking/src/utils/get_type_icon.dart';
+import 'package:parking/src/utils/vehicle_utils.dart';
 import 'package:provider/provider.dart';
 
 class ReportsPage extends StatefulWidget {
@@ -170,6 +171,7 @@ class _ReportsPageState extends State<ReportsPage> {
                 OneCard(
                   title: "Registros",
                   children: value.listOrder.map((e) {
+                    double total = getTotalPrice(e);
                     return OneListTile(
                       title: '${e.model} | ${e.plate}',
                       leading: Icon(icon(e.typeVehicles!)),
@@ -184,7 +186,7 @@ class _ReportsPageState extends State<ReportsPage> {
                       ],
                       children: [
                         OneText.caption(
-                          '${e.createdAt?.formated} - ${UtilBrasilFields.obterReal(e.price ?? 0)}',
+                          '${e.createdAt?.formated} - ${UtilBrasilFields.obterReal(total)}',
                         ),
                       ],
                       onTap: () {
