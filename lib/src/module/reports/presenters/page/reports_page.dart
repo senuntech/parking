@@ -22,42 +22,6 @@ class _ReportsPageState extends State<ReportsPage> {
   DateTime first = DateTime.now();
   DateTime last = DateTime.now();
 
-  /*   Future<void> showDatePicker() async {
-    OneBottomSheet.show(
-      context: context,
-      title: 'Selecionar Data',
-      content: [
-        CalendarDatePicker2(
-          config: CalendarDatePicker2Config(
-            calendarType: CalendarDatePicker2Type.range,
-            selectedDayHighlightColor: OneColors.primary,
-          ),
-          value: [first, last],
-          onValueChanged: (dates) {
-            first = dates.first;
-            last = dates.last;
-            setState(() {});
-          },
-        ),
-        OneDivider(),
-        Align(
-          alignment: .centerRight,
-          child: Padding(
-            padding: .all(8.0),
-            child: OneButton(
-              onPressed: () async {
-                Navigator.pop(context);
-                await reportsController.getOrderByDate(first, last);
-              },
-              label: 'Selecionar',
-              style: OneButtonStyle.primary,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
- */
   @override
   void initState() {
     reportsController = context.read<ReportsController>();

@@ -1,4 +1,5 @@
 import 'package:one_ds/core/extension/date_timer.dart';
+import 'package:one_ds/core/extension/double_extension.dart';
 import 'package:parking/core/enum/type_charge_enum.dart';
 import 'package:parking/core/enum/vehicle_enum.dart';
 import 'package:parking/src/module/ticket/data/model/order_ticket_model.dart';
@@ -41,5 +42,5 @@ double getTotalPrice(OrderTicketModel orderTicketModel) {
   double value = price / 60;
   int minutes = getMinutes(orderTicketModel);
 
-  return (value * minutes).ceilToDouble();
+  return (value * minutes).roundUp;
 }
