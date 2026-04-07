@@ -2,7 +2,7 @@ name: parking
 description: "A new Flutter project."
 publish_to: 'none' 
 
-version: 1.0.3+5
+version: 1.0.4+6
 
 environment:
   sdk: ^3.10.1
@@ -18,7 +18,7 @@ dependencies:
     path: ../one_ds
   print_bluetooth_thermal: ^1.1.9
   esc_pos_utils_plus: ^2.0.4
-  image_halftone: ^1.0.0
+  image_halftone: ^1.1.0
   provider: ^6.1.5+1
   sqlbrite: ^2.8.0
   path_provider: ^2.1.5
