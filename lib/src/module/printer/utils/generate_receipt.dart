@@ -98,7 +98,7 @@ Future<List<int>> printerReceipit(
       getPix(
         type: settings.type_pix!,
         pix: settings.my_pix!,
-        value: order.price ?? 0,
+        value: getTotalPrice(order),
       ),
     );
     bytes += generator.feed(1);
