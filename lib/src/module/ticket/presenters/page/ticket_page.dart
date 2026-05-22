@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:one_ds/core/index.dart';
 import 'package:one_ds/one_ds.dart'
     show
-        CpfInputFormatter,
         LucideIcons,
         OneText,
         TelefoneInputFormatter,
@@ -16,6 +15,8 @@ import 'package:parking/src/module/category/presenters/controller/category_contr
 import 'package:parking/src/module/category/data/model/category_model.dart';
 import 'package:parking/src/module/ticket/presenters/controller/ticket_controller.dart';
 import 'package:parking/src/module/ticket/data/model/order_ticket_model.dart';
+import 'package:parking/core/ads/ad_manager.dart';
+import 'package:parking/core/purchase/purchase.dart';
 import 'package:provider/provider.dart';
 
 class TicketPage extends StatefulWidget {
@@ -94,12 +95,33 @@ class _TicketPageState extends State<TicketPage> {
       createdAt: DateTime.now(),
       price: orderTicketModel.price,
     );
-    ticketController.addTicket(orderTicketModel);
-    Navigator.popAndPushNamed(
-      context,
-      Routes.receipt,
-      arguments: orderTicketModel,
-    );
+
+    final isPremium = context.read<PurchaseApp>().isPurchased;
+    if (isPremium) {
+      ticketController.addTicket(orderTicketModel);
+      Navigator.popAndPushNamed(
+        context,
+        Routes.receipt,
+        arguments: orderTicketModel,
+      );
+    } else {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(child: CircularProgressIndicator()),
+      );
+      ticketController.addTicket(orderTicketModel);
+      AdManager().showInterstitialAd(
+        onAdDismissed: () {
+          Navigator.of(context).pop();
+          Navigator.popAndPushNamed(
+            context,
+            Routes.receipt,
+            arguments: orderTicketModel,
+          );
+        },
+      );
+    }
   }
 
   @override

@@ -15,6 +15,8 @@ import 'package:parking/src/module/home/presenters/widgets/input.dart';
 import 'package:parking/src/module/ticket/presenters/controller/ticket_controller.dart';
 import 'package:parking/src/module/ticket/data/model/order_ticket_model.dart';
 import 'package:parking/src/widgets/vehicle_widget.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:parking/core/ads/ad_banner_widget.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -448,6 +450,7 @@ class _HomePageState extends State<HomePage> {
                 );
               },
             ),
+            const AdBannerWidget(adSize: AdSize.mediumRectangle),
             OneSize.height128,
           ],
         ),
@@ -461,6 +464,7 @@ class _HomePageState extends State<HomePage> {
               },
               child: Icon(LucideIcons.plus),
             ),
+      bottomNavigationBar: const AdBannerWidget(),
     );
   }
 }

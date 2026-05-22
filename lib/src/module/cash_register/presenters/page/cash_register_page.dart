@@ -13,6 +13,8 @@ import 'package:parking/src/utils/get_type_icon.dart';
 import 'package:parking/src/utils/vehicle_utils.dart';
 import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 import 'package:provider/provider.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:parking/core/ads/ad_banner_widget.dart';
 
 class CashRegisterPage extends StatefulWidget {
   const CashRegisterPage({super.key});
@@ -193,6 +195,7 @@ class _CashRegisterPageState extends State<CashRegisterPage> {
                     );
                   }).toList(),
                 ),
+                const AdBannerWidget(adSize: AdSize.mediumRectangle),
               ],
             ),
           );

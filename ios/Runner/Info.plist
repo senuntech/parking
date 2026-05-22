@@ -59,5 +59,7 @@
 
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Este aplicativo precisa de acesso à galeria para ler códigos QR.</string>
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-9009761598954280~1563900669</string>
 </dict>
 </plist>

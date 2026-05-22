@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:one_ds/core/components/index.dart';
+import 'package:parking/core/ads/ad_manager.dart';
 import 'package:parking/core/purchase/purchase.dart';
 import 'package:parking/main.dart';
 import 'package:parking/src/module/category/presenters/controller/category_controller.dart';
@@ -23,9 +24,15 @@ class _SplashPageState extends State<SplashPage> {
 
   void init() async {
     await context.read<SettingsController>().get();
+    if (!mounted) return;
     await context.read<CategoryController>().getCategories();
+    if (!mounted) return;
     await context.read<TicketController>().getTickets();
+    if (!mounted) return;
     await context.read<PurchaseApp>().initialize();
+    if (!mounted) return;
+    await AdManager().initialize();
+    if (!mounted) return;
     Navigator.pushReplacementNamed(context, Routes.home);
   }
 
