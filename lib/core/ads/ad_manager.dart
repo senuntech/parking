@@ -22,7 +22,7 @@ class AdManager {
 
   String get interstitialAdUnitId {
     if (Platform.isAndroid) {
-      return 'ca-app-pub-9009761598954280/3002620786';
+      return 'ca-app-pub-9009761598954280/7755343888';
     } else if (Platform.isIOS) {
       return 'ca-app-pub-3940256099942544/4411468910';
     }
