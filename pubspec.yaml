@@ -2,7 +2,7 @@ name: parking
 description: "A new Flutter project."
 publish_to: 'none' 
 
-version: 1.1.1+9
+version: 1.1.2+10
 
 environment:
   sdk: ^3.10.1
