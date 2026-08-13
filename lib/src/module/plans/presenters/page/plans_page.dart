@@ -27,10 +27,10 @@ class _PlansPageState extends State<PlansPage> {
       progress = true;
     });
     await purchaseApp.restore();
-    OneSnakBar.show(
+    OneSnackBar.show(
       context,
       message: 'Plano restaurado com sucesso',
-      type: .success,
+      type: MessageType.success,
     );
     setState(() {
       progress = false;

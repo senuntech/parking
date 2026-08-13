@@ -42,7 +42,7 @@ class _CashRegisterPageState extends State<CashRegisterPage> {
   }
 
   Future<void> returnVehicle(OrderTicketModel orderTicketModel) async {
-    ShowAlert.show(
+    OneShowAlert.show(
       context,
       title: 'Retornar veículo',
       message: 'Deseja devolver o veículo?',
@@ -58,10 +58,10 @@ class _CashRegisterPageState extends State<CashRegisterPage> {
 
   Future<void> printReport() async {
     if (deviceMacAddress.isEmpty) {
-      OneSnakBar.show(
+      OneSnackBar.show(
         context,
         message: 'Impressora não encontrada',
-        type: .warning,
+        type: MessageType.warning,
       );
       return;
     }

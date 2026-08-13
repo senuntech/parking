@@ -54,10 +54,10 @@ class _ReceiptPageState extends State<ReceiptPage> {
 
   void onPrint() async {
     if (deviceMacAddress.isEmpty) {
-      OneSnakBar.show(
+      OneSnackBar.show(
         context,
         message: 'Impressora não encontrada',
-        type: .warning,
+        type: MessageType.warning,
       );
       return;
     }

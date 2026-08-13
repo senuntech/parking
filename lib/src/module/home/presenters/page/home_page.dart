@@ -230,7 +230,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void onDelete(int id) {
-    ShowAlert.show(
+    OneShowAlert.show(
       context,
       title: 'Deletar',
       message: 'Deseja deletar o veículo?',
@@ -238,17 +238,17 @@ class _HomePageState extends State<HomePage> {
       labelNo: 'Não',
       onYes: () {
         context.read<TicketController>().deleteTicket(id);
-        OneSnakBar.show(
+        OneSnackBar.show(
           context,
           message: 'Veículo deletado com sucesso',
-          type: .success,
+          type: MessageType.success,
         );
       },
     );
   }
 
   void onExit(int id, String name) {
-    ShowAlert.show(
+    OneShowAlert.show(
       context,
       title: 'Retirar $name',
       message: 'Deseja retirar o veículo?',

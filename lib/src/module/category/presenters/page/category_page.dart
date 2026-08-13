@@ -20,10 +20,10 @@ class _CategoryPageState extends State<CategoryPage> {
       ),
     );
     if (res == true) {
-      OneSnakBar.show(
+      OneSnackBar.show(
         context,
         message: 'Cadastrado com sucesso',
-        type: .success,
+        type: MessageType.success,
       );
     }
   }

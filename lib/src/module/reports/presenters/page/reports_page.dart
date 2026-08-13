@@ -34,7 +34,7 @@ class _ReportsPageState extends State<ReportsPage> {
   }
 
   Future<void> onDelete(int id) async {
-    ShowAlert.show(
+    OneShowAlert.show(
       context,
       title: 'Deletar',
       labelYes: 'Sim',
