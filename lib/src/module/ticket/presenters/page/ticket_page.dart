@@ -367,7 +367,7 @@ class _TicketPageState extends State<TicketPage> {
           ? FloatingActionButton.extended(
               icon: Icon(LucideIcons.save),
               onPressed: onSave,
-              label: OneText('Adicionar Veículo'),
+              label: Text('Adicionar Veículo'),
             )
           : null,
     );

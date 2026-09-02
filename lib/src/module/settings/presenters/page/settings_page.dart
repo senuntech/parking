@@ -269,7 +269,7 @@ class _SettingsPageState extends State<SettingsPage> {
       floatingActionButton: showButton
           ? FloatingActionButton.extended(
               onPressed: onSave,
-              label: OneText('Salvar Configurações'),
+              label: Text('Salvar Configurações'),
               icon: Icon(LucideIcons.check),
             )
           : null,

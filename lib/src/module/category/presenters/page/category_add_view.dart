@@ -62,7 +62,9 @@ class _CategoryAddViewState extends State<CategoryAddView> {
     );
     numberOfVacanciesController.text =
         categoryModel.numberOfVacancies?.toString() ?? '0';
-    periods = List.from(categoryModel.periods ?? []);
+    setState(() {
+      periods = List.from(categoryModel.periods ?? []);
+    });
   }
 
   void _showAddPeriodDialog() {

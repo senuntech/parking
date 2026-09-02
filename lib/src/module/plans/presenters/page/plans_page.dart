@@ -93,7 +93,7 @@ class _PlansPageState extends State<PlansPage> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: pressedRestore,
         icon: Icon(LucideIcons.refreshCcw),
-        label: OneText('Restaurar Plano'),
+        label: Text('Restaurar Plano'),
       ),
     );
   }
