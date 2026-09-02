@@ -56,6 +56,9 @@ class _TicketPageState extends State<TicketPage> {
     if (valueType == TypeChargeEnum.day.type) {
       orderTicketModel.price = categoryModel!.dayPrice!;
     }
+    if (valueType == TypeChargeEnum.period.type) {
+      orderTicketModel.price = 0.0;
+    }
   }
 
   void setTypeCar(int? value) {
@@ -336,6 +339,15 @@ class _TicketPageState extends State<TicketPage> {
                           onChanged: setValue,
                           value: 3,
                           label: 'Dia',
+                          type: .background,
+                          selected: valueType,
+                        ),
+                      ),
+                      Expanded(
+                        child: OneSelect(
+                          onChanged: setValue,
+                          value: 4,
+                          label: 'Período',
                           type: .background,
                           selected: valueType,
                         ),

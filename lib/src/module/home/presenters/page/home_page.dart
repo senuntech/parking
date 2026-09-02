@@ -278,7 +278,8 @@ class _HomePageState extends State<HomePage> {
         return TypeChargeEnum.fix;
       case 2:
         return TypeChargeEnum.hour;
-
+      case 4:
+        return TypeChargeEnum.period;
       default:
         return TypeChargeEnum.day;
     }

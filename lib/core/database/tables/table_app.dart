@@ -40,3 +40,15 @@ String modelsTicket = '''
     number_of_vacancies INTEGER
   )
 ''';
+
+String tableVehiclePeriods = '''
+  CREATE TABLE vehicle_periods(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    vehicle_id INTEGER,
+    start_minute INTEGER,
+    end_minute INTEGER,
+    price DOUBLE,
+    is_additional BOOLEAN DEFAULT 0,
+    FOREIGN KEY(vehicle_id) REFERENCES vehicles(id) ON DELETE CASCADE
+  )
+''';

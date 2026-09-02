@@ -1,7 +1,8 @@
 enum TypeChargeEnum {
   fix(1),
   hour(2),
-  day(3);
+  day(3),
+  period(4);
 
   const TypeChargeEnum(this.type);
   final int type;

@@ -26,11 +26,12 @@ class AppDatabase {
     final path = join(directory.path, 'parking.db');
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: (Database db, int version) async {
         await db.execute(settingsTable);
         await db.execute(modelsTicket);
         await db.execute(orderTicket);
+        await db.execute(tableVehiclePeriods);
 
         final batch = db.batch();
 
@@ -39,7 +40,9 @@ class AppDatabase {
         debugPrint('Batch result: $list');
       },
       onUpgrade: (db, oldVersion, newVersion) async {
-        if (oldVersion < newVersion) {}
+        if (oldVersion < 2) {
+          await db.execute(tableVehiclePeriods);
+        }
       },
     );
   }
