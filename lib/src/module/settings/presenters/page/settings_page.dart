@@ -249,7 +249,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 title: 'Tema do Aplicativo',
                 children: [
                   OneListTileSelect(
-                    title: 'Dark',
+                    title: isDark ? 'Dark' : 'Light',
                     subtitle: 'Selecione entre o tema Dark e Light',
                     selected: isDark,
                     onChanged: (value) {

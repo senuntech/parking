@@ -98,7 +98,9 @@ class _ReceiptPageState extends State<ReceiptPage> {
       body: OneBody(
         child: Container(
           decoration: BoxDecoration(
-            color: OneColors.background,
+            color: context.watch<SettingsController>().isDark
+                ? OneColors.backgroundDark
+                : OneColors.background,
             border: .all(color: OneColors.dark1.withAlpha(50)),
           ),
           height: MediaQuery.of(context).size.height * .7,
