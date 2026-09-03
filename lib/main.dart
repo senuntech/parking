@@ -59,6 +59,10 @@ class MyApp extends StatelessWidget {
               scaffoldBackgroundColor: isDark
                   ? OneColors.backgroundDark
                   : OneColors.background,
+
+              floatingActionButtonTheme: FloatingActionButtonThemeData(
+                extendedSizeConstraints: BoxConstraints(minHeight: 60),
+              ),
             ),
             localizationsDelegates: GlobalMaterialLocalizations.delegates,
             supportedLocales: const [Locale('pt', 'BR')],
