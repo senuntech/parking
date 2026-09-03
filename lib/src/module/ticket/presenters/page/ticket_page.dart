@@ -383,7 +383,7 @@ class _TicketPageState extends State<TicketPage> {
                         ],
                         showDivider: false,
                       );
-                    }).toList(),
+                    }),
                   ],
                 ],
               ),
