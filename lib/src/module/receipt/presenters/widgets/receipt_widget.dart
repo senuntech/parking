@@ -10,12 +10,12 @@ import 'package:parking/src/utils/vehicle_utils.dart';
 import 'package:provider/provider.dart';
 
 class ReceiptWidget extends StatelessWidget {
-  ReceiptWidget({
+  const ReceiptWidget({
     super.key,
     required this.isExist,
     required this.orderTicketModel,
   });
-  final Color backGround = Color(0xffFFFFE6);
+
   final bool isExist;
   final OrderTicketModel? orderTicketModel;
 
@@ -30,11 +30,15 @@ class ReceiptWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<SettingsController>(
       builder: (context, controller, child) {
+        final isDark = controller.isDark;
+        final backGround = isDark
+            ? OneColors.backgroundDark
+            : const Color(0xffFFFFE6);
+
         return Container(
           color: backGround,
           child: Column(
             spacing: OneSizeConstants.size8,
-
             crossAxisAlignment: .stretch,
             mainAxisAlignment: .center,
             children: [
@@ -54,16 +58,12 @@ class ReceiptWidget extends StatelessWidget {
                 '${controller.settingsModel.phone.orEmpty} | ${controller.settingsModel.document.orEmpty}',
                 textAlign: .center,
               ),
-
               OneSize.height8,
-
               OneText.heading1(
                 orderTicketModel!.exitAt != null ? 'SAÍDA' : 'ENTRADA',
                 textAlign: .center,
               ),
-
               OneText.caption(getDate(orderTicketModel!), textAlign: .center),
-
               OneText.caption(
                 getVehicle(orderTicketModel!.typeVehicles!).name,
                 textAlign: .center,
@@ -78,7 +78,6 @@ class ReceiptWidget extends StatelessWidget {
                   textAlign: .center,
                 ),
               ],
-
               OneSize.height8,
               OneText.heading3(orderTicketModel!.name!, textAlign: .center),
               if ((controller.settingsModel.show_pix ?? false) &&
@@ -92,6 +91,14 @@ class ReceiptWidget extends StatelessWidget {
                     ),
                     version: QrVersions.auto,
                     size: 120,
+                    eyeStyle: QrEyeStyle(
+                      eyeShape: QrEyeShape.square,
+                      color: isDark ? Colors.white : Colors.black,
+                    ),
+                    dataModuleStyle: QrDataModuleStyle(
+                      dataModuleShape: QrDataModuleShape.square,
+                      color: isDark ? Colors.white : Colors.black,
+                    ),
                   ),
                 ),
                 OneText.caption('Pague com Pix', textAlign: .center),
@@ -104,6 +111,7 @@ class ReceiptWidget extends StatelessWidget {
                     data: orderTicketModel!.code!,
                     width: 200,
                     height: 100,
+                    color: isDark ? Colors.white : Colors.black,
                   ),
                 ),
               ],

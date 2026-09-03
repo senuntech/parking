@@ -9,15 +9,24 @@ class SettingsController extends ChangeNotifier {
   SettingsController({required this.briteDb});
   int typePix = 0;
 
+  bool get isDark => settingsModel.is_dark ?? false;
+
   void setPix(int type) {
     typePix = type;
     notifyListeners();
+  }
+
+  Future<void> setDarkTheme(bool isDark) async {
+    settingsModel.is_dark = isDark;
+    notifyListeners();
+    await save();
   }
 
   Future<void> save() async {
     settingsModel = settingsModel.copyWith(type_pix: typePix);
     if (settingsModel.id == null) {
       await briteDb.insert('settings', settingsModel.toMap());
+      notifyListeners();
       return;
     }
 
@@ -26,6 +35,7 @@ class SettingsController extends ChangeNotifier {
       settingsModel.toMap(),
       where: 'id=${settingsModel.id}',
     );
+    notifyListeners();
   }
 
   Future<void> get() async {
@@ -33,6 +43,7 @@ class SettingsController extends ChangeNotifier {
     if (res.isNotEmpty) {
       settingsModel = SettingsModel.fromMap(res.first);
       typePix = settingsModel.type_pix ?? 0;
+      notifyListeners();
     }
   }
 }

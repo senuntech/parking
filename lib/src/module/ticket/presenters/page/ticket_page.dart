@@ -5,12 +5,14 @@ import 'package:one_ds/one_ds.dart'
     show
         LucideIcons,
         OneText,
+        PlacaVeiculoInputFormatter,
         TelefoneInputFormatter,
-        PlacaVeiculoInputFormatter;
+        UtilBrasilFields;
 import 'package:parking/core/enum/type_charge_enum.dart';
 
 import 'package:parking/core/utils/validator.dart';
 import 'package:parking/main.dart';
+import 'package:parking/src/module/category/data/model/vehicle_period_model.dart';
 import 'package:parking/src/module/category/presenters/controller/category_controller.dart';
 import 'package:parking/src/module/category/data/model/category_model.dart';
 import 'package:parking/src/module/ticket/presenters/controller/ticket_controller.dart';
@@ -38,9 +40,18 @@ class _TicketPageState extends State<TicketPage> {
   final plateController = TextEditingController();
   OrderTicketModel orderTicketModel = OrderTicketModel();
   final ScrollController scrollController = ScrollController();
+  List<VehiclePeriodModel> periods = [];
 
   bool showButton = false;
   CategoryModel? categoryModel;
+
+  bool get isCategoryFixed =>
+      categoryModel?.typeOfBilling == 1 ||
+      categoryModel?.typeOfBilling == 3 ||
+      categoryModel?.typeOfBilling == null;
+
+  bool get isCategoryPeriod =>
+      categoryModel?.typeOfBilling == 2 || categoryModel?.typeOfBilling == 3;
 
   void setValue(int? value) {
     setState(() {
@@ -56,6 +67,9 @@ class _TicketPageState extends State<TicketPage> {
     if (valueType == TypeChargeEnum.day.type) {
       orderTicketModel.price = categoryModel!.dayPrice!;
     }
+    if (valueType == TypeChargeEnum.period.type) {
+      orderTicketModel.price = 0.0;
+    }
   }
 
   void setTypeCar(int? value) {
@@ -66,6 +80,14 @@ class _TicketPageState extends State<TicketPage> {
     categoryModel = context.read<CategoryController>().categories.firstWhere(
       (element) => element.id == value,
     );
+    periods = categoryModel?.periods ?? [];
+
+    if (!isCategoryPeriod && valueType == TypeChargeEnum.period.type) {
+      valueType = TypeChargeEnum.fix.type;
+    } else if (!isCategoryFixed && valueType != TypeChargeEnum.period.type) {
+      valueType = TypeChargeEnum.period.type;
+    }
+
     setValue(valueType);
   }
 
@@ -307,41 +329,62 @@ class _TicketPageState extends State<TicketPage> {
                   ),
                 ],
               ),
+
               OneCard(
                 title: 'Tipo De Cobrança',
                 children: [
-                  Row(
-                    spacing: 16,
-                    children: [
-                      Expanded(
-                        child: OneSelect(
-                          onChanged: setValue,
-                          value: 1,
-                          label: 'Fixo',
-                          type: .background,
-                          selected: valueType,
+                  if (!isCategoryPeriod) ...[
+                    Row(
+                      spacing: 16,
+                      children: [
+                        if (isCategoryFixed) ...[
+                          Expanded(
+                            child: OneSelect(
+                              onChanged: setValue,
+                              value: 1,
+                              label: 'Fixo',
+                              type: .background,
+                              selected: valueType,
+                            ),
+                          ),
+                          Expanded(
+                            child: OneSelect(
+                              onChanged: setValue,
+                              value: 2,
+                              label: 'Hora',
+                              type: .background,
+                              selected: valueType,
+                            ),
+                          ),
+                          Expanded(
+                            child: OneSelect(
+                              onChanged: setValue,
+                              value: 3,
+                              label: 'Dia',
+                              type: .background,
+                              selected: valueType,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ] else ...[
+                    ...periods.map((p) {
+                      return OneListTile(
+                        title: 'De ${p.startMinute} a ${p.endMinute} min',
+                        leading: Icon(
+                          LucideIcons.timer,
+                          color: OneColors.dark1,
                         ),
-                      ),
-                      Expanded(
-                        child: OneSelect(
-                          onChanged: setValue,
-                          value: 2,
-                          label: 'Hora',
-                          type: .background,
-                          selected: valueType,
-                        ),
-                      ),
-                      Expanded(
-                        child: OneSelect(
-                          onChanged: setValue,
-                          value: 3,
-                          label: 'Dia',
-                          type: .background,
-                          selected: valueType,
-                        ),
-                      ),
-                    ],
-                  ),
+                        actions: [
+                          OneText.heading3(
+                            UtilBrasilFields.obterReal(p.price ?? 0),
+                          ),
+                        ],
+                        showDivider: false,
+                      );
+                    }),
+                  ],
                 ],
               ),
 
@@ -355,7 +398,7 @@ class _TicketPageState extends State<TicketPage> {
           ? FloatingActionButton.extended(
               icon: Icon(LucideIcons.save),
               onPressed: onSave,
-              label: OneText('Adicionar Veículo'),
+              label: Text('Adicionar Veículo'),
             )
           : null,
     );

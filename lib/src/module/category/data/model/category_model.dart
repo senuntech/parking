@@ -1,9 +1,13 @@
+import 'package:parking/src/module/category/data/model/vehicle_period_model.dart';
+
 class CategoryModel {
   int? id;
   double? singlePrice;
   double? hourlyRate;
   double? dayPrice;
   int? numberOfVacancies;
+  List<VehiclePeriodModel>? periods;
+  int? typeOfBilling;
 
   CategoryModel({
     this.id,
@@ -11,6 +15,8 @@ class CategoryModel {
     this.hourlyRate,
     this.dayPrice,
     this.numberOfVacancies,
+    this.periods,
+    this.typeOfBilling,
   });
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) => CategoryModel(
@@ -19,6 +25,11 @@ class CategoryModel {
     hourlyRate: json['hourly_rate'],
     dayPrice: json['day_price'],
     numberOfVacancies: json['number_of_vacancies'],
+    periods: json['periods'] != null
+        ? List<VehiclePeriodModel>.from(
+            json['periods'].map((x) => VehiclePeriodModel.fromJson(x)))
+        : null,
+    typeOfBilling: json['type_of_billing'] ?? 1,
   );
 
   Map<String, dynamic> toJson() => {
@@ -27,6 +38,8 @@ class CategoryModel {
     'hourly_rate': hourlyRate,
     'day_price': dayPrice,
     'number_of_vacancies': numberOfVacancies,
+    'periods': periods?.map((x) => x.toJson()).toList(),
+    'type_of_billing': typeOfBilling,
   };
 
   CategoryModel copyWith({
@@ -35,6 +48,8 @@ class CategoryModel {
     double? hourlyRate,
     double? dayPrice,
     int? numberOfVacancies,
+    List<VehiclePeriodModel>? periods,
+    int? typeOfBilling,
   }) {
     return CategoryModel(
       id: id ?? this.id,
@@ -42,6 +57,8 @@ class CategoryModel {
       hourlyRate: hourlyRate ?? this.hourlyRate,
       dayPrice: dayPrice ?? this.dayPrice,
       numberOfVacancies: numberOfVacancies ?? this.numberOfVacancies,
+      periods: periods ?? this.periods,
+      typeOfBilling: typeOfBilling ?? this.typeOfBilling,
     );
   }
 }

@@ -63,6 +63,10 @@ class _TimerWidgetState extends State<TimerWidget> {
       return (corlor: OneColors.warning, icon: LucideIcons.clock);
     }
 
+    if (widget.typeCharge == TypeChargeEnum.period) {
+      return (corlor: OneColors.primaryDark, icon: LucideIcons.calendarClock);
+    }
+
     return (corlor: OneColors.success, icon: LucideIcons.check);
   }
 
@@ -71,7 +75,8 @@ class _TimerWidgetState extends State<TimerWidget> {
       return getDay;
     }
 
-    if (widget.typeCharge == TypeChargeEnum.hour) {
+    if (widget.typeCharge == TypeChargeEnum.hour ||
+        widget.typeCharge == TypeChargeEnum.period) {
       return getHour;
     }
 

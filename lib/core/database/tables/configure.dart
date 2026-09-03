@@ -11,13 +11,13 @@ Future<void> populateInitialData(final Database db) async {
     numberOfVacancies: 1,
   );
 
-  await db.insert('vehicles', model.toJson());
+  await db.insert('vehicles', model.toJson()..remove('periods'));
   await db.insert(
     'vehicles',
-    model.copyWith(id: VehicleEnum.motorcycle.id).toJson(),
+    model.copyWith(id: VehicleEnum.motorcycle.id).toJson()..remove('periods'),
   );
   await db.insert(
     'vehicles',
-    model.copyWith(id: VehicleEnum.truck.id).toJson(),
+    model.copyWith(id: VehicleEnum.truck.id).toJson()..remove('periods'),
   );
 }

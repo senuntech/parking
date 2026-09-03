@@ -48,10 +48,18 @@ class _PrinterPageState extends State<PrinterPage> {
       await PrintBluetoothThermal.writeString(
         printText: PrintTextSize(size: 1, text: 'Impressora Conectada'),
       );
-      OneSnackBar.show(context, message: 'Impressão Conectada', type: MessageType.success);
+      OneSnackBar.show(
+        context,
+        message: 'Impressão Conectada',
+        type: MessageType.success,
+      );
       setState(() {});
     } catch (e) {
-      OneSnackBar.show(context, message: 'Erro ao conectar', type: MessageType.error);
+      OneSnackBar.show(
+        context,
+        message: 'Erro ao conectar',
+        type: MessageType.error,
+      );
       deviceMacAddress = '';
       setState(() {});
     }
@@ -157,7 +165,7 @@ class _PrinterPageState extends State<PrinterPage> {
           ? null
           : FloatingActionButton.extended(
               onPressed: onScanPressed,
-              label: OneText(buttonState.label),
+              label: Text(buttonState.label),
               backgroundColor: buttonState.colors,
               icon: buttonState.icon,
             ),

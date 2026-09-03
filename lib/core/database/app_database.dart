@@ -26,11 +26,12 @@ class AppDatabase {
     final path = join(directory.path, 'parking.db');
     return await openDatabase(
       path,
-      version: 1,
+      version: 4,
       onCreate: (Database db, int version) async {
         await db.execute(settingsTable);
         await db.execute(modelsTicket);
         await db.execute(orderTicket);
+        await db.execute(tableVehiclePeriods);
 
         final batch = db.batch();
 
@@ -39,7 +40,19 @@ class AppDatabase {
         debugPrint('Batch result: $list');
       },
       onUpgrade: (db, oldVersion, newVersion) async {
-        if (oldVersion < newVersion) {}
+        if (oldVersion < 2) {
+          await db.execute(tableVehiclePeriods);
+        }
+        if (oldVersion < 3) {
+          await db.execute(
+            'ALTER TABLE vehicles ADD COLUMN type_of_billing INTEGER DEFAULT 1',
+          );
+        }
+        if (oldVersion < 4) {
+          await db.execute(
+            'ALTER TABLE settings ADD COLUMN is_dark BOOLEAN DEFAULT 0',
+          );
+        }
       },
     );
   }

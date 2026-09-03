@@ -42,7 +42,7 @@ class ReportsController extends ChangeNotifier {
 
     for (var element in result) {
       final monthKey = element.createdAt!.month;
-      final saleValue = element.price ?? 0;
+      final saleValue = getTotalPrice(element);
 
       if (groupedSales.containsKey(monthKey)) {
         groupedSales[monthKey]!.vendas += saleValue;
@@ -79,7 +79,7 @@ class ReportsController extends ChangeNotifier {
 
   double get getTotalMonth {
     return listOrderMonth.fold(0, (previousValue, element) {
-      double price = element.price ?? 0;
+      double price = getTotalPrice(element);
       return previousValue + price;
     });
   }
@@ -100,7 +100,11 @@ class ReportsController extends ChangeNotifier {
       orderBy: 'exit_at DESC',
     );
 
-    return result.map((e) => OrderTicketModel.fromMap(e)).toList();
+    return result.map((e) {
+      final order = OrderTicketModel.fromMap(e);
+      order.price = getTotalPrice(order);
+      return order;
+    }).toList();
   }
 
   Future<void> delete(int id) async {

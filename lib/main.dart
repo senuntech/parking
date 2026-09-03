@@ -45,28 +45,43 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-      child: MaterialApp(
-        title: 'Gestor Estacionamento',
-        theme: ThemeData(
-          useMaterial3: false,
-          primarySwatch: generateMaterialColor(color: const Color(0xff273D4A)),
-        ),
-        localizationsDelegates: GlobalMaterialLocalizations.delegates,
-        supportedLocales: const [Locale('pt', 'BR')],
-        locale: const Locale('pt', 'BR'),
-        debugShowCheckedModeBanner: false,
-        initialRoute: Routes.splash,
-        routes: {
-          Routes.splash: (context) => SplashPage(),
-          Routes.home: (context) => HomePage(),
-          Routes.ticket: (context) => TicketPage(),
-          Routes.receipt: (context) => ReceiptPage(),
-          Routes.settings: (context) => SettingsPage(),
-          Routes.category: (context) => CategoryPage(),
-          Routes.reports: (context) => ReportsPage(),
-          Routes.cashRegister: (context) => CashRegisterPage(),
-          Routes.printer: (context) => PrinterPage(),
-          Routes.plans: (context) => PlansPage(),
+      child: Consumer<SettingsController>(
+        builder: (context, settingsController, _) {
+          final isDark = settingsController.isDark;
+          return MaterialApp(
+            title: 'Gestor Estacionamento',
+            theme: ThemeData(
+              useMaterial3: false,
+              primarySwatch: generateMaterialColor(
+                color: const Color(0xff273D4A),
+              ),
+              brightness: isDark ? Brightness.dark : Brightness.light,
+              scaffoldBackgroundColor: isDark
+                  ? OneColors.backgroundDark
+                  : OneColors.background,
+
+              floatingActionButtonTheme: FloatingActionButtonThemeData(
+                extendedSizeConstraints: BoxConstraints(minHeight: 60),
+              ),
+            ),
+            localizationsDelegates: GlobalMaterialLocalizations.delegates,
+            supportedLocales: const [Locale('pt', 'BR')],
+            locale: const Locale('pt', 'BR'),
+            debugShowCheckedModeBanner: false,
+            initialRoute: Routes.splash,
+            routes: {
+              Routes.splash: (context) => SplashPage(),
+              Routes.home: (context) => HomePage(),
+              Routes.ticket: (context) => TicketPage(),
+              Routes.receipt: (context) => ReceiptPage(),
+              Routes.settings: (context) => SettingsPage(),
+              Routes.category: (context) => CategoryPage(),
+              Routes.reports: (context) => ReportsPage(),
+              Routes.cashRegister: (context) => CashRegisterPage(),
+              Routes.printer: (context) => PrinterPage(),
+              Routes.plans: (context) => PlansPage(),
+            },
+          );
         },
       ),
     );
