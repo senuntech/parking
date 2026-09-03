@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/icon/icon.png" width="128" alt="Logo Gestor de Estacionamento" />
+</p>
+
 # 🚗 Gestor de Estacionamento & Pátio (Parking)
 
 Uma aplicação robusta e elegante desenvolvida em **Flutter** para o gerenciamento completo de estacionamentos, pátios de veículos e fluxo de caixa. O aplicativo conta com recursos premium de persistência local, emissão de recibos via impressoras térmicas Bluetooth e monetização inteligente integrada com anúncios AdMob (totalmente contornável para assinantes).
