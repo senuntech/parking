@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 import 'package:in_app_purchase_storekit/store_kit_wrappers.dart';
+import 'package:parking/core/analytics/analytics_service.dart';
 
 /// Delegate necessário apenas no iOS.
 class ExamplePaymentQueueDelegate implements SKPaymentQueueDelegateWrapper {
@@ -106,18 +107,27 @@ class PurchaseApp with ChangeNotifier {
       return false;
     }
 
+    AnalyticsService.instance.logIniciarCompra(idProduto: prod.id);
+
     try {
       final purchaseParam = PurchaseParam(productDetails: prod);
       final started = await _iap.buyNonConsumable(purchaseParam: purchaseParam);
 
       if (!started) {
         log('⚠ Compra não iniciada.');
+        AnalyticsService.instance.logCompraFalhou(
+          idProduto: prod.id,
+          motivoErro: 'nao_iniciada',
+        );
       }
 
       return started;
     } catch (e) {
       log('Erro ao iniciar compra: $e');
-
+      AnalyticsService.instance.logCompraFalhou(
+        idProduto: prod.id,
+        motivoErro: e.toString(),
+      );
       return false;
     }
   }
@@ -142,15 +152,28 @@ class PurchaseApp with ChangeNotifier {
 
         case PurchaseStatus.error:
           log('❌ Erro na compra: ${purchase.error?.message}');
+          AnalyticsService.instance.logCompraFalhou(
+            idProduto: purchase.productID,
+            motivoErro: purchase.error?.message,
+          );
           break;
 
         case PurchaseStatus.purchased:
         case PurchaseStatus.restored:
           _processSuccessfulPurchase(purchase);
+          AnalyticsService.instance.logCompraConcluida(
+            idProduto: purchase.productID,
+            valor: product?.rawPrice,
+            moeda: product?.currencyCode,
+          );
           break;
 
         case PurchaseStatus.canceled:
           log('Compra cancelada pelo usuário.');
+          AnalyticsService.instance.logCompraFalhou(
+            idProduto: purchase.productID,
+            motivoErro: 'cancelado_pelo_usuario',
+          );
           break;
       }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:one_ds/one_ds.dart';
+import 'package:parking/core/analytics/analytics_service.dart';
 import 'package:parking/core/purchase/purchase.dart';
 import 'package:parking/src/module/plans/presenters/widget/alert_plan.dart';
 import 'package:parking/src/module/plans/presenters/widget/card_plan_premium.dart';
@@ -19,6 +20,7 @@ class _PlansPageState extends State<PlansPage> {
   @override
   void initState() {
     purchaseApp = context.read<PurchaseApp>();
+    AnalyticsService.instance.logVisualizarPlanos(origem: 'menu_planos');
     super.initState();
   }
 

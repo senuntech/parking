@@ -1,9 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:one_ds/one_ds.dart';
+import 'package:parking/core/analytics/analytics_service.dart';
 
 class ShowScan extends StatefulWidget {
   const ShowScan({super.key});
@@ -27,6 +26,9 @@ class _ShowScanState extends State<ShowScan> {
 
   void onClose(String value) async {
     await controller.stop();
+    AnalyticsService.instance.logLeituraScannerTicket(
+      sucesso: value.isNotEmpty,
+    );
     Navigator.pop(context, value);
   }
 

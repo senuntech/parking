@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:one_ds/one_ds.dart';
+import 'package:parking/core/analytics/analytics_service.dart';
 import 'package:parking/src/module/printer/presenters/widget/empty_search_printer.dart';
 import 'package:parking/src/module/printer/presenters/widget/item_printer.dart';
 import 'package:parking/src/module/printer/presenters/widget/printer_connected.dart';
@@ -53,12 +54,20 @@ class _PrinterPageState extends State<PrinterPage> {
         message: 'Impressão Conectada',
         type: MessageType.success,
       );
+      AnalyticsService.instance.logConexaoImpressora(
+        nomeDispositivo: deviceMacAddress,
+        sucesso: true,
+      );
       setState(() {});
     } catch (e) {
       OneSnackBar.show(
         context,
         message: 'Erro ao conectar',
         type: MessageType.error,
+      );
+      AnalyticsService.instance.logConexaoImpressora(
+        nomeDispositivo: deviceMacAddress,
+        sucesso: false,
       );
       deviceMacAddress = '';
       setState(() {});

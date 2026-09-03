@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:parking/core/analytics/analytics_service.dart';
 import 'package:parking/src/module/settings/data/model/settings_model.dart';
 import 'package:sqlbrite/sqlbrite.dart';
 
@@ -19,6 +20,10 @@ class SettingsController extends ChangeNotifier {
   Future<void> setDarkTheme(bool isDark) async {
     settingsModel.is_dark = isDark;
     notifyListeners();
+    AnalyticsService.instance.logConfiguracaoAlterada(
+      nomeConfiguracao: 'tema_escuro',
+      novoValor: isDark ? 'ativo' : 'inativo',
+    );
     await save();
   }
 
@@ -27,6 +32,10 @@ class SettingsController extends ChangeNotifier {
     if (settingsModel.id == null) {
       await briteDb.insert('settings', settingsModel.toMap());
       notifyListeners();
+      AnalyticsService.instance.logConfiguracaoAlterada(
+        nomeConfiguracao: 'dados_empresa',
+        novoValor: settingsModel.name ?? '',
+      );
       return;
     }
 
@@ -36,6 +45,10 @@ class SettingsController extends ChangeNotifier {
       where: 'id=${settingsModel.id}',
     );
     notifyListeners();
+    AnalyticsService.instance.logConfiguracaoAlterada(
+      nomeConfiguracao: 'dados_empresa',
+      novoValor: settingsModel.name ?? '',
+    );
   }
 
   Future<void> get() async {

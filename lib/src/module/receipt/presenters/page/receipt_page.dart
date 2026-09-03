@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:one_ds/one_ds.dart';
+import 'package:parking/core/analytics/analytics_service.dart';
 import 'package:parking/src/module/printer/presenters/page/printer_page.dart';
 import 'package:parking/src/module/printer/utils/generate_receipt.dart';
 import 'package:parking/src/module/receipt/presenters/widgets/receipt_widget.dart';
@@ -46,8 +47,18 @@ class _ReceiptPageState extends State<ReceiptPage> {
       );
 
       await SharePlus.instance.share(params);
+      AnalyticsService.instance.logImpressaoComprovante(
+        tipoComprovante: orderTicketModel?.exitAt != null ? 'saida' : 'entrada',
+        tipoImpressora: 'pdf',
+        sucesso: true,
+      );
       return true;
     } catch (e) {
+      AnalyticsService.instance.logImpressaoComprovante(
+        tipoComprovante: orderTicketModel?.exitAt != null ? 'saida' : 'entrada',
+        tipoImpressora: 'pdf',
+        sucesso: false,
+      );
       return false;
     }
   }
@@ -61,8 +72,21 @@ class _ReceiptPageState extends State<ReceiptPage> {
       );
       return;
     }
-    final text = await printerReceipit(settings, orderTicketModel!, false);
-    await PrintBluetoothThermal.writeBytes(text);
+    try {
+      final text = await printerReceipit(settings, orderTicketModel!, false);
+      await PrintBluetoothThermal.writeBytes(text);
+      AnalyticsService.instance.logImpressaoComprovante(
+        tipoComprovante: orderTicketModel?.exitAt != null ? 'saida' : 'entrada',
+        tipoImpressora: 'bluetooth',
+        sucesso: true,
+      );
+    } catch (e) {
+      AnalyticsService.instance.logImpressaoComprovante(
+        tipoComprovante: orderTicketModel?.exitAt != null ? 'saida' : 'entrada',
+        tipoImpressora: 'bluetooth',
+        sucesso: false,
+      );
+    }
   }
 
   @override

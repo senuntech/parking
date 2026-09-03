@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:parking/core/analytics/analytics_service.dart';
+import 'package:parking/core/enum/vehicle_enum.dart';
 import 'package:parking/src/module/category/data/model/category_model.dart';
 import 'package:parking/src/module/category/data/model/vehicle_period_model.dart';
 import 'package:parking/src/utils/vehicle_utils.dart';
@@ -28,6 +30,22 @@ class CategoryController extends ChangeNotifier {
 
     getCategories();
     notifyListeners();
+
+    final vehicleName = VehicleEnum.values
+        .firstWhere(
+          (v) => v.id == category.id,
+          orElse: () => VehicleEnum.car,
+        )
+        .name;
+
+    AnalyticsService.instance.logCategoriaAtualizada(
+      tipoVeiculo: vehicleName,
+      tipoCobranca: '${category.typeOfBilling ?? 1}',
+      valor: category.singlePrice ??
+          category.hourlyRate ??
+          category.dayPrice ??
+          0.0,
+    );
   }
 
   Future<void> getCategories() async {

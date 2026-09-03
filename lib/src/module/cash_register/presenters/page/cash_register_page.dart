@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:one_ds/one_ds.dart';
+import 'package:parking/core/analytics/analytics_service.dart';
 import 'package:parking/core/enum/payment_method_enum.dart';
 import 'package:parking/main.dart';
 import 'package:parking/src/module/printer/presenters/page/printer_page.dart';
@@ -66,17 +67,30 @@ class _CashRegisterPageState extends State<CashRegisterPage> {
       return;
     }
 
-    final settings = context.read<SettingsController>().settingsModel;
-    final data = await printerReport(
-      settings: settings,
-      total: reportsController.getTotal,
-      pix: reportsController.getTotalByType(PaymentMethodEnum.pix.id),
-      cash: reportsController.getTotalByType(PaymentMethodEnum.cash.id),
-      card: reportsController.getTotalByType(PaymentMethodEnum.card.id),
-      first: first,
-      last: last,
-    );
-    await PrintBluetoothThermal.writeBytes(data);
+    try {
+      final settings = context.read<SettingsController>().settingsModel;
+      final data = await printerReport(
+        settings: settings,
+        total: reportsController.getTotal,
+        pix: reportsController.getTotalByType(PaymentMethodEnum.pix.id),
+        cash: reportsController.getTotalByType(PaymentMethodEnum.cash.id),
+        card: reportsController.getTotalByType(PaymentMethodEnum.card.id),
+        first: first,
+        last: last,
+      );
+      await PrintBluetoothThermal.writeBytes(data);
+      AnalyticsService.instance.logImpressaoComprovante(
+        tipoComprovante: 'fechamento_caixa',
+        tipoImpressora: 'bluetooth',
+        sucesso: true,
+      );
+    } catch (e) {
+      AnalyticsService.instance.logImpressaoComprovante(
+        tipoComprovante: 'fechamento_caixa',
+        tipoImpressora: 'bluetooth',
+        sucesso: false,
+      );
+    }
   }
 
   @override

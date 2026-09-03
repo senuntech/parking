@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:one_ds/one_ds.dart';
+import 'package:parking/core/analytics/analytics_service.dart';
 import 'package:parking/src/module/reports/presenters/controller/reports_controller.dart';
 import 'package:parking/src/module/reports/utils/get_pdf.dart';
 import 'package:parking/src/module/settings/presenters/controller/settings_controller.dart';
@@ -37,6 +38,10 @@ class _ViewReportsState extends State<ViewReports> {
     settingsController = context.read<SettingsController>();
     //publisherApp = context.read<PurchaseApp>();
     settingsModel = settingsController.settingsModel;
+    AnalyticsService.instance.logVisualizarRelatorio(
+      periodo: '${widget.listDates.firstOrNull?.formatedDate}_${widget.listDates.lastOrNull?.formatedDate}',
+      filtro: 'pdf_view',
+    );
     super.initState();
   }
 
@@ -153,6 +158,9 @@ class _ViewReportsState extends State<ViewReports> {
             icon: LucideIcons.printer,
 
             onPressed: () async {
+              AnalyticsService.instance.logExportarRelatorio(
+                formato: 'impressao_pdf',
+              );
               await Printing.layoutPdf(
                 onLayout: (format) async => await _generatePdf(),
               );
@@ -162,6 +170,9 @@ class _ViewReportsState extends State<ViewReports> {
             icon: LucideIcons.share2,
             color: OneColors.success,
             onPressed: () async {
+              AnalyticsService.instance.logExportarRelatorio(
+                formato: 'compartilhar_pdf',
+              );
               await Printing.sharePdf(
                 bytes: await _generatePdf(),
                 filename: 'Relatório-${DateTime.now().date}.pdf',

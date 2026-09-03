@@ -1,5 +1,9 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:parking/core/analytics/analytics_service.dart';
+import 'package:parking/core/enum/payment_method_enum.dart';
+import 'package:parking/core/enum/type_charge_enum.dart';
+import 'package:parking/core/enum/vehicle_enum.dart';
 import 'package:parking/src/module/ticket/data/model/order_ticket_model.dart';
 import 'package:parking/src/utils/vehicle_utils.dart';
 import 'package:sqlbrite/sqlbrite.dart';
@@ -20,6 +24,24 @@ class TicketController extends ChangeNotifier {
     await briteDb.insert('order_ticket', orderTicketModel.toMap());
     getTickets();
     notifyListeners();
+
+    AnalyticsService.instance.logEntradaVeiculo(
+      tipoVeiculo: VehicleEnum.values
+          .firstWhere(
+            (v) => v.id == orderTicketModel.typeVehicles,
+            orElse: () => VehicleEnum.car,
+          )
+          .name,
+      tipoCobranca: TypeChargeEnum.values
+          .firstWhere(
+            (t) => t.type == orderTicketModel.valueType,
+            orElse: () => TypeChargeEnum.hour,
+          )
+          .name,
+      temPlaca: orderTicketModel.plate != null &&
+          orderTicketModel.plate!.trim().isNotEmpty,
+      valorBase: orderTicketModel.price,
+    );
   }
 
   Future<void> updateTicket(OrderTicketModel orderTicketModel) async {
@@ -36,6 +58,8 @@ class TicketController extends ChangeNotifier {
     await briteDb.delete('order_ticket', where: 'id = ?', whereArgs: [id]);
     getTickets();
     notifyListeners();
+
+    AnalyticsService.instance.logCancelamentoTicket(idTicket: id);
   }
 
   Future<List<OrderTicketModel>> getTickets() async {
@@ -97,6 +121,36 @@ class TicketController extends ChangeNotifier {
       whereArgs: [id],
     );
     await getTickets();
+
+    final durationMinutes = orderTicketModel.exitAt != null &&
+            orderTicketModel.createdAt != null
+        ? orderTicketModel.exitAt!
+            .difference(orderTicketModel.createdAt!)
+            .inMinutes
+        : 0;
+
+    AnalyticsService.instance.logSaidaVeiculo(
+      tipoVeiculo: VehicleEnum.values
+          .firstWhere(
+            (v) => v.id == orderTicketModel.typeVehicles,
+            orElse: () => VehicleEnum.car,
+          )
+          .name,
+      tipoCobranca: TypeChargeEnum.values
+          .firstWhere(
+            (t) => t.type == orderTicketModel.valueType,
+            orElse: () => TypeChargeEnum.hour,
+          )
+          .name,
+      tempoMinutos: durationMinutes,
+      valorPago: orderTicketModel.price ?? 0.0,
+      formaPagamento: PaymentMethodEnum.values
+          .firstWhere(
+            (p) => p.id == paymentMethod,
+            orElse: () => PaymentMethodEnum.cash,
+          )
+          .name,
+    );
 
     return orderTicketModel;
   }
