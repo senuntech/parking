@@ -7,6 +7,7 @@ class CategoryModel {
   double? dayPrice;
   int? numberOfVacancies;
   List<VehiclePeriodModel>? periods;
+  int? typeOfBilling;
 
   CategoryModel({
     this.id,
@@ -15,6 +16,7 @@ class CategoryModel {
     this.dayPrice,
     this.numberOfVacancies,
     this.periods,
+    this.typeOfBilling,
   });
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) => CategoryModel(
@@ -27,6 +29,7 @@ class CategoryModel {
         ? List<VehiclePeriodModel>.from(
             json['periods'].map((x) => VehiclePeriodModel.fromJson(x)))
         : null,
+    typeOfBilling: json['type_of_billing'] ?? 1,
   );
 
   Map<String, dynamic> toJson() => {
@@ -36,6 +39,7 @@ class CategoryModel {
     'day_price': dayPrice,
     'number_of_vacancies': numberOfVacancies,
     'periods': periods?.map((x) => x.toJson()).toList(),
+    'type_of_billing': typeOfBilling,
   };
 
   CategoryModel copyWith({
@@ -45,6 +49,7 @@ class CategoryModel {
     double? dayPrice,
     int? numberOfVacancies,
     List<VehiclePeriodModel>? periods,
+    int? typeOfBilling,
   }) {
     return CategoryModel(
       id: id ?? this.id,
@@ -53,6 +58,7 @@ class CategoryModel {
       dayPrice: dayPrice ?? this.dayPrice,
       numberOfVacancies: numberOfVacancies ?? this.numberOfVacancies,
       periods: periods ?? this.periods,
+      typeOfBilling: typeOfBilling ?? this.typeOfBilling,
     );
   }
 }

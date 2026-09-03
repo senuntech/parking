@@ -8,7 +8,8 @@ String settingsTable = '''
               type_pix INTEGER, 
               show_pix BOOLEAN, 
               my_pix TEXT,
-              text_receipt TEXT
+              text_receipt TEXT,
+              is_dark BOOLEAN DEFAULT 0
           )
         ''';
 
@@ -37,7 +38,8 @@ String modelsTicket = '''
     single_price DOUBLE,
     hourly_rate DOUBLE,
     day_price DOUBLE,
-    number_of_vacancies INTEGER
+    number_of_vacancies INTEGER,
+    type_of_billing INTEGER
   )
 ''';
 

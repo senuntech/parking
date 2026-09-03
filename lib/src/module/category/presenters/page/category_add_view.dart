@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:one_ds/core/ui/organisms/one_app_bar.dart';
-import 'package:one_ds/core/ui/organisms/one_body.dart';
+
 import 'package:one_ds/one_ds.dart';
 import 'package:parking/core/enum/vehicle_enum.dart';
 import 'package:parking/core/utils/validator.dart';
@@ -27,6 +26,7 @@ class _CategoryAddViewState extends State<CategoryAddView> {
   final dayPriceController = TextEditingController();
   final numberOfVacanciesController = TextEditingController();
   List<VehiclePeriodModel> periods = [];
+  int typeOfBilling = 1;
 
   @override
   void initState() {
@@ -35,11 +35,19 @@ class _CategoryAddViewState extends State<CategoryAddView> {
     super.initState();
   }
 
+  bool get isPeriodBilling => typeOfBilling == 2;
+
   void onSave() async {
     if (!formKey.currentState!.validate()) {
       return;
     }
     formKey.currentState!.save();
+
+    if (!isPeriodBilling) {
+      periods.clear();
+    }
+
+    categoryModel = categoryModel.copyWith(typeOfBilling: typeOfBilling);
     categoryModel.periods = periods;
     categoryController
       ..addCategory(categoryModel)
@@ -64,6 +72,7 @@ class _CategoryAddViewState extends State<CategoryAddView> {
         categoryModel.numberOfVacancies?.toString() ?? '0';
     setState(() {
       periods = List.from(categoryModel.periods ?? []);
+      typeOfBilling = categoryModel.typeOfBilling ?? 1;
     });
   }
 
@@ -71,7 +80,6 @@ class _CategoryAddViewState extends State<CategoryAddView> {
     final startCtrl = TextEditingController();
     final endCtrl = TextEditingController();
     final priceCtrl = TextEditingController();
-    bool isAdditional = false;
 
     OneBottomSheet.show(
       context: context,
@@ -83,26 +91,19 @@ class _CategoryAddViewState extends State<CategoryAddView> {
               mainAxisSize: MainAxisSize.min,
               spacing: OneSizeConstants.size16,
               children: [
-                OneListTileSelect(
-                  title: 'É hora adicional?',
-                  subtitle: 'Selecione para adicionar hora adicional',
-                  selected: isAdditional,
-                  onChanged: (v) => setStateDialog(() => isAdditional = v),
+                OneInput(
+                  controller: startCtrl,
+                  keyboardType: TextInputType.number,
+                  hintText: 'Ex: 0',
+                  label: 'Minuto Inicial',
                 ),
-                if (!isAdditional) ...[
-                  OneInput(
-                    controller: startCtrl,
-                    keyboardType: TextInputType.number,
-                    hintText: 'Ex: 0',
-                    label: 'Minuto Inicial',
-                  ),
-                  OneInput(
-                    controller: endCtrl,
-                    keyboardType: TextInputType.number,
-                    hintText: 'Ex: 30',
-                    label: 'Minuto Final',
-                  ),
-                ],
+                OneInput(
+                  controller: endCtrl,
+                  keyboardType: TextInputType.number,
+                  hintText: 'Ex: 30',
+                  label: 'Minuto Final',
+                ),
+
                 OneInput(
                   controller: priceCtrl,
                   keyboardType: TextInputType.number,
@@ -138,14 +139,9 @@ class _CategoryAddViewState extends State<CategoryAddView> {
                           setState(() {
                             periods.add(
                               VehiclePeriodModel(
-                                startMinute: isAdditional
-                                    ? null
-                                    : int.tryParse(startCtrl.text),
-                                endMinute: isAdditional
-                                    ? null
-                                    : int.tryParse(endCtrl.text),
+                                startMinute: int.tryParse(startCtrl.text),
+                                endMinute: int.tryParse(endCtrl.text),
                                 price: price,
-                                isAdditional: isAdditional,
                               ),
                             );
                           });
@@ -182,68 +178,6 @@ class _CategoryAddViewState extends State<CategoryAddView> {
                 title: 'Informações do Estacionamento',
                 children: [
                   OneInput(
-                    hintText: 'Ex: R\$ 10,00',
-                    icon: LucideIcons.banknoteArrowDown,
-                    label: 'Valor Fixo',
-                    keyboardType: TextInputType.number,
-                    controller: singlePriceController,
-                    validator: validatorRequired,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      CentavosInputFormatter(moeda: true),
-                    ],
-                    onSaved: (value) {
-                      categoryModel = categoryModel.copyWith(
-                        singlePrice: UtilBrasilFields.converterMoedaParaDouble(
-                          value ?? '0',
-                        ),
-                      );
-                    },
-                  ),
-                  OneInput(
-                    hintText: 'Ex: R\$ 10,00',
-                    icon: LucideIcons.dollarSign,
-                    label: 'Valor Por Hora',
-                    keyboardType: TextInputType.number,
-                    controller: hourlyRateController,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      CentavosInputFormatter(moeda: true),
-                    ],
-                    onSaved: (value) {
-                      if (value!.isEmpty) {
-                        return;
-                      }
-                      categoryModel = categoryModel.copyWith(
-                        hourlyRate: UtilBrasilFields.converterMoedaParaDouble(
-                          value,
-                        ),
-                      );
-                    },
-                  ),
-                  OneInput(
-                    hintText: 'Ex: R\$ 10,00',
-                    icon: LucideIcons.banknote,
-                    label: 'Valor Por Dia',
-                    keyboardType: TextInputType.number,
-                    controller: dayPriceController,
-                    onSaved: (value) {
-                      if (value!.isEmpty) {
-                        return;
-                      }
-                      categoryModel = categoryModel.copyWith(
-                        dayPrice: UtilBrasilFields.converterMoedaParaDouble(
-                          value,
-                        ),
-                      );
-                    },
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      CentavosInputFormatter(moeda: true),
-                    ],
-                  ),
-
-                  OneInput(
                     hintText: 'Ex: 10',
                     icon: LucideIcons.octagonMinus,
                     label: 'Quantidade De Vagas',
@@ -263,43 +197,150 @@ class _CategoryAddViewState extends State<CategoryAddView> {
               ),
 
               OneCard(
-                title: 'Tabela de Períodos',
+                title: "Modelo de Cobrança",
                 children: [
-                  if (periods.isEmpty)
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text('Nenhum período configurado'),
-                    ),
-                  ...periods.map(
-                    (p) => OneListTile(
-                      title: (p.isAdditional == true
-                          ? 'Hora Adicional'
-                          : 'De ${p.startMinute} a ${p.endMinute} min'),
-                      children: [
-                        OneText.caption(
-                          'R\$ ${UtilBrasilFields.obterReal(p.price ?? 0)}',
-                        ),
-                      ],
-                      actions: [
-                        OneMiniButton(
-                          icon: LucideIcons.trash2,
-                          color: OneColors.error,
-                          onPressed: () {
+                  Row(
+                    spacing: OneSizeConstants.size16,
+                    children: [
+                      Expanded(
+                        child: OneSelect<int>(
+                          onChanged: (value) {
                             setState(() {
-                              periods.remove(p);
+                              typeOfBilling = value!;
                             });
                           },
+                          selected: typeOfBilling,
+                          label: 'Fixo',
+                          type: OneSelectType.background,
+                          value: 1,
                         ),
-                      ],
-                    ),
-                  ),
-                  TextButton.icon(
-                    icon: const Icon(Icons.add),
-                    label: const Text('Adicionar Período'),
-                    onPressed: _showAddPeriodDialog,
+                      ),
+                      Expanded(
+                        child: OneSelect<int>(
+                          onChanged: (value) {
+                            setState(() {
+                              typeOfBilling = value!;
+                            });
+                          },
+                          selected: typeOfBilling,
+                          label: 'Período',
+                          type: OneSelectType.background,
+                          value: 2,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
+              if (isPeriodBilling) ...[
+                OneCard(
+                  title: 'Tabela de Períodos',
+                  children: [
+                    if (periods.isEmpty)
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text('Nenhum período configurado'),
+                      ),
+                    ...periods.map(
+                      (p) => OneListTile(
+                        title: (p.isAdditional == true
+                            ? 'Hora Adicional'
+                            : 'De ${p.startMinute} a ${p.endMinute} min'),
+                        children: [
+                          OneText.caption(
+                            'R\$ ${UtilBrasilFields.obterReal(p.price ?? 0)}',
+                          ),
+                        ],
+                        showDivider: false,
+                        actions: [
+                          OneMiniButton(
+                            icon: LucideIcons.trash2,
+                            color: OneColors.error,
+                            onPressed: () {
+                              setState(() {
+                                periods.remove(p);
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    OneButton(
+                      label: 'Adicionar Período',
+                      onPressed: _showAddPeriodDialog,
+                      style: OneButtonStyle.secondary,
+                    ),
+                  ],
+                ),
+              ] else ...[
+                OneCard(
+                  title: 'Cobrança',
+                  children: [
+                    OneInput(
+                      hintText: 'Ex: R\$ 10,00',
+                      icon: LucideIcons.banknoteArrowDown,
+                      label: 'Valor Fixo',
+                      keyboardType: TextInputType.number,
+                      controller: singlePriceController,
+                      validator: validatorRequired,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        CentavosInputFormatter(moeda: true),
+                      ],
+                      onSaved: (value) {
+                        categoryModel = categoryModel.copyWith(
+                          singlePrice:
+                              UtilBrasilFields.converterMoedaParaDouble(
+                                value ?? '0',
+                              ),
+                        );
+                      },
+                    ),
+                    OneInput(
+                      hintText: 'Ex: R\$ 10,00',
+                      icon: LucideIcons.dollarSign,
+                      label: 'Valor Por Hora',
+                      keyboardType: TextInputType.number,
+                      controller: hourlyRateController,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        CentavosInputFormatter(moeda: true),
+                      ],
+                      onSaved: (value) {
+                        if (value!.isEmpty) {
+                          return;
+                        }
+                        categoryModel = categoryModel.copyWith(
+                          hourlyRate: UtilBrasilFields.converterMoedaParaDouble(
+                            value,
+                          ),
+                        );
+                      },
+                    ),
+                    OneInput(
+                      hintText: 'Ex: R\$ 10,00',
+                      icon: LucideIcons.banknote,
+                      label: 'Valor Por Dia',
+                      keyboardType: TextInputType.number,
+                      controller: dayPriceController,
+                      onSaved: (value) {
+                        if (value!.isEmpty) {
+                          return;
+                        }
+                        categoryModel = categoryModel.copyWith(
+                          dayPrice: UtilBrasilFields.converterMoedaParaDouble(
+                            value,
+                          ),
+                        );
+                      },
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        CentavosInputFormatter(moeda: true),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
             ],
           ),
         ),

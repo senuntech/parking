@@ -10,8 +10,9 @@ class SettingsModel {
   int? type_pix;
   bool? show_pix;
   String? my_pix;
-
   String? text_receipt;
+  bool? is_dark;
+
   SettingsModel({
     this.id,
     this.image_path,
@@ -21,8 +22,8 @@ class SettingsModel {
     this.type_pix,
     this.show_pix = false,
     this.my_pix,
-
     this.text_receipt,
+    this.is_dark = false,
   });
 
   Map<String, dynamic> toMap() {
@@ -36,6 +37,7 @@ class SettingsModel {
       'show_pix': show_pix! ? 1 : 0,
       'my_pix': my_pix,
       'text_receipt': text_receipt,
+      'is_dark': is_dark == true ? 1 : 0,
     };
   }
 
@@ -51,10 +53,10 @@ class SettingsModel {
       type_pix: map['type_pix'] != null ? map['type_pix'] as int : null,
       show_pix: map['show_pix'] != null ? map['show_pix'] == 1 : null,
       my_pix: map['my_pix'] != null ? map['my_pix'] as String : null,
-
       text_receipt: map['text_receipt'] != null
           ? map['text_receipt'] as String
           : null,
+      is_dark: map['is_dark'] != null ? map['is_dark'] == 1 : false,
     );
   }
 
@@ -73,6 +75,7 @@ class SettingsModel {
     bool? show_pix,
     String? my_pix,
     String? text_receipt,
+    bool? is_dark,
   }) {
     return SettingsModel(
       id: id ?? this.id,
@@ -83,8 +86,8 @@ class SettingsModel {
       type_pix: type_pix ?? this.type_pix,
       show_pix: show_pix ?? this.show_pix,
       my_pix: my_pix ?? this.my_pix,
-
       text_receipt: text_receipt ?? this.text_receipt,
+      is_dark: is_dark ?? this.is_dark,
     );
   }
 }

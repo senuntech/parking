@@ -21,6 +21,7 @@ class _SettingsPageState extends State<SettingsPage> {
   final ScrollController scrollController = ScrollController();
   final GlobalKey keyScrollPix = GlobalKey();
   bool showPix = false;
+  bool isDark = false;
   bool showButton = false;
   late SettingsController settingsController;
   final formKey = GlobalKey<FormState>();
@@ -56,6 +57,7 @@ class _SettingsPageState extends State<SettingsPage> {
     super.initState();
     settingsController = context.read<SettingsController>();
     showPix = settingsController.settingsModel.show_pix ?? false;
+    isDark = settingsController.settingsModel.is_dark ?? false;
     if (settingsController.settingsModel.image_path != null) {
       image = Image.file(File(settingsController.settingsModel.image_path!));
     }
@@ -79,6 +81,7 @@ class _SettingsPageState extends State<SettingsPage> {
     }
     formKey.currentState!.save();
     settingsController.settingsModel.show_pix = showPix;
+    settingsController.settingsModel.is_dark = isDark;
     await settingsController.save();
     Navigator.pop(context);
   }
@@ -137,9 +140,6 @@ class _SettingsPageState extends State<SettingsPage> {
         title: 'Configurações',
         subtitle: 'Configurações do estabelecimento',
         context: context,
-        actions: [
-          OneMiniButton(icon: LucideIcons.databaseBackup, onPressed: () {}),
-        ],
       ),
       body: OneBody(
         scrollController: scrollController,
@@ -245,6 +245,22 @@ class _SettingsPageState extends State<SettingsPage> {
                 ],
               ),
 
+              OneCard(
+                title: 'Tema do Aplicativo',
+                children: [
+                  OneListTileSelect(
+                    title: 'Dark',
+                    subtitle: 'Selecione entre o tema Dark e Light',
+                    selected: isDark,
+                    onChanged: (value) {
+                      setState(() {
+                        isDark = !isDark;
+                      });
+                      settingsController.setDarkTheme(isDark);
+                    },
+                  ),
+                ],
+              ),
               OneCard(
                 title: 'Texto do Rodapé',
                 children: [

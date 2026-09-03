@@ -32,94 +32,74 @@ class _HomePageState extends State<HomePage> {
   FocusNode focusNode = FocusNode();
 
   Widget get drawer {
-    return Drawer(
-      child: ListView(
-        padding: const EdgeInsets.all(8.0),
-        children: [
-          DrawerHeader(
-            decoration: BoxDecoration(color: OneColors.background),
-            child: Center(
-              child: Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    image: AssetImage('assets/icon/icon.png'),
-                    fit: BoxFit.scaleDown,
-                  ),
-                ),
-              ),
-            ),
+    return OneDrawer(
+      heightHeader: 200,
+      header: Container(
+        width: 100,
+        height: 100,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          image: DecorationImage(
+            image: AssetImage('assets/icon/icon.png'),
+            fit: BoxFit.scaleDown,
           ),
-          OneSize.height16,
-          Column(
-            spacing: OneSizeConstants.size16,
-            children: [
-              OneListTile(
-                title: 'Planos Premium',
-                leading: Icon(LucideIcons.crown),
-                onTap: () {
-                  Navigator.popAndPushNamed(context, Routes.plans);
-                },
-                showDivider: false,
-              ),
-              OneListTile(
-                title: 'Impressoras',
-                leading: Icon(LucideIcons.printer),
-                onTap: () {
-                  Navigator.popAndPushNamed(context, Routes.printer);
-                },
-                showDivider: false,
-              ),
-              OneListTile(
-                title: 'Preços',
-                leading: Icon(LucideIcons.banknote),
-                onTap: () {
-                  Navigator.popAndPushNamed(context, Routes.category);
-                },
-                showDivider: false,
-              ),
-
-              OneListTile(
-                title: 'Relatórios',
-                leading: Icon(LucideIcons.chartColumnBig),
-                onTap: () {
-                  Navigator.popAndPushNamed(context, Routes.reports);
-                },
-                showDivider: false,
-              ),
-              OneListTile(
-                title: 'Dúvidas ou Sugestões',
-                leading: Icon(LucideIcons.mail),
-                onTap: () {
-                  LaunchApp.email(subjectTitle: 'Gestor Estacionamento');
-                  Navigator.pop(context);
-                },
-                showDivider: false,
-              ),
-              OneListTile(
-                title: 'Configurações',
-                leading: Icon(LucideIcons.settings),
-                onTap: () {
-                  Navigator.popAndPushNamed(context, Routes.settings);
-                },
-                showDivider: false,
-              ),
-              if (Platform.isIOS)
-                OneListTile(
-                  title: 'Termos',
-                  leading: Icon(LucideIcons.book),
-                  onTap: () {
-                    Navigator.pop(context);
-                    showTerms();
-                  },
-                  showDivider: false,
-                ),
-            ],
-          ),
-        ],
+        ),
       ),
+      children: [
+        OneListTile.drawer(
+          title: 'Planos Premium',
+          leading: Icon(LucideIcons.crown),
+          onTap: () {
+            Navigator.popAndPushNamed(context, Routes.plans);
+          },
+        ),
+        OneListTile.drawer(
+          title: 'Impressoras',
+          leading: Icon(LucideIcons.printer),
+          onTap: () {
+            Navigator.popAndPushNamed(context, Routes.printer);
+          },
+        ),
+        OneListTile.drawer(
+          title: 'Preços',
+          leading: Icon(LucideIcons.banknote),
+          onTap: () {
+            Navigator.popAndPushNamed(context, Routes.category);
+          },
+        ),
+
+        OneListTile.drawer(
+          title: 'Relatórios',
+          leading: Icon(LucideIcons.chartColumnBig),
+          onTap: () {
+            Navigator.popAndPushNamed(context, Routes.reports);
+          },
+        ),
+        OneListTile.drawer(
+          title: 'Dúvidas ou Sugestões',
+          leading: Icon(LucideIcons.mail),
+          onTap: () {
+            LaunchApp.email(subjectTitle: 'Gestor Estacionamento');
+            Navigator.pop(context);
+          },
+        ),
+        OneListTile.drawer(
+          title: 'Configurações',
+          leading: Icon(LucideIcons.settings),
+          onTap: () {
+            Navigator.popAndPushNamed(context, Routes.settings);
+          },
+        ),
+        if (Platform.isIOS)
+          OneListTile.drawer(
+            title: 'Termos',
+            leading: Icon(LucideIcons.book),
+            onTap: () {
+              Navigator.pop(context);
+              showTerms();
+            },
+          ),
+      ],
     );
   }
 
@@ -316,44 +296,56 @@ class _HomePageState extends State<HomePage> {
           builder: (context, setState) {
             return Column(
               children: [
-                CheckboxListTile(
-                  value: PaymentMethodEnum.pix.id == typeCharge,
+                OneCheckBoxListTile(
+                  value: typeCharge,
                   onChanged: (value) {
                     setState(() {
                       typeCharge = PaymentMethodEnum.pix.id;
                     });
                   },
-                  title: OneText('Pix'),
+                  label: 'Pix',
+                  checkedValue: PaymentMethodEnum.pix.id == typeCharge,
                 ),
-                CheckboxListTile(
-                  value: PaymentMethodEnum.cash.id == typeCharge,
+                OneCheckBoxListTile(
+                  value: typeCharge,
                   onChanged: (value) {
                     setState(() {
                       typeCharge = PaymentMethodEnum.cash.id;
                     });
                   },
-                  title: OneText('Dinheiro'),
+                  label: 'Dinheiro',
+                  checkedValue: PaymentMethodEnum.cash.id == typeCharge,
                 ),
 
-                CheckboxListTile(
-                  value: PaymentMethodEnum.card.id == typeCharge,
+                OneCheckBoxListTile(
+                  value: typeCharge,
                   onChanged: (value) {
                     setState(() {
                       typeCharge = PaymentMethodEnum.card.id;
                     });
                   },
-                  title: OneText('Cartão'),
+                  label: 'Cartão',
+                  checkedValue: PaymentMethodEnum.card.id == typeCharge,
                 ),
 
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Align(
-                    alignment: .centerRight,
-                    child: SizedBox(
-                      height: 50,
+                OneDivider(),
+
+                Row(
+                  spacing: OneSizeConstants.size16,
+                  children: [
+                    Expanded(
+                      child: OneButton(
+                        label: 'Cancelar',
+                        style: OneButtonStyle.gost,
+                        onPressed: () async {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ),
+                    Expanded(
                       child: OneButton(
                         label: 'Confirmar',
-                        style: OneButtonStyle.outlined,
+                        style: OneButtonStyle.primary,
                         onPressed: () async {
                           final order = await context
                               .read<TicketController>()
@@ -366,7 +358,7 @@ class _HomePageState extends State<HomePage> {
                         },
                       ),
                     ),
-                  ),
+                  ],
                 ),
               ],
             );

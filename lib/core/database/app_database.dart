@@ -26,7 +26,7 @@ class AppDatabase {
     final path = join(directory.path, 'parking.db');
     return await openDatabase(
       path,
-      version: 2,
+      version: 4,
       onCreate: (Database db, int version) async {
         await db.execute(settingsTable);
         await db.execute(modelsTicket);
@@ -42,6 +42,16 @@ class AppDatabase {
       onUpgrade: (db, oldVersion, newVersion) async {
         if (oldVersion < 2) {
           await db.execute(tableVehiclePeriods);
+        }
+        if (oldVersion < 3) {
+          await db.execute(
+            'ALTER TABLE vehicles ADD COLUMN type_of_billing INTEGER DEFAULT 1',
+          );
+        }
+        if (oldVersion < 4) {
+          await db.execute(
+            'ALTER TABLE settings ADD COLUMN is_dark BOOLEAN DEFAULT 0',
+          );
         }
       },
     );
